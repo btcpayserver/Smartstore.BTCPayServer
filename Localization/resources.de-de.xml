@@ -1,0 +1,62 @@
+﻿<Language Name="Deutsch" IsDefault="false" IsRightToLeft="false">
+	<LocaleResource Name="Plugins.FriendlyName.SmartStore.BtcPay" AppendRootKey="false">
+		<Value>BTCPay</Value>
+	</LocaleResource>
+	<LocaleResource Name="Plugins.Description.SmartStore.BtcPay" AppendRootKey="false">
+		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BTCPay Server</Value>
+	</LocaleResource>
+
+	<!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+	<LocaleResource Name="Plugins.FriendlyName.Payments.BtcPay" AppendRootKey="false">
+		<Value>BTCPay</Value>
+	</LocaleResource>
+	<!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+	<LocaleResource Name="Plugins.Description.Payments.BtcPay" AppendRootKey="false">
+		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BtcPay Server.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.BtcPay" AppendRootKey="false">
+			<Children>	
+			<LocaleResource Name="AdminInstruction">
+				<Value>
+					<![CDATA[
+<div class="mb-1">Geben Sie unten Ihre Daten ein, um dieses Plugin zu konfigurieren:</div>
+<ul><li>So erstellen Sie den BTCPay-API-Schlüssel, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">siehe hier</a>.</li>
+<li>So erstellen Sie den BTCPay-Web-Hook, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">siehe hier</a>. (Verwenden Sie das von BTCPay generierte Standardgeheimnis) </li>
+<li>Bei BTCPay Store settings / General / Payment : Wählen Sie die Option <i>Allow anyone to create invoice</i> </li></ul> ]]>
+				</Value>
+			</LocaleResource>
+			<LocaleResource Name="BtcPayUrl">
+				<Value>BTCPay-URL</Value>
+			</LocaleResource>
+			<LocaleResource Name="BtcPayUrl.Hint">
+				<Value>Die URL Ihrer BTCPay-Instanz</Value>
+			</LocaleResource>
+			<LocaleResource Name="ApiKey">
+				<Value>API-Schlüssel</Value>
+			</LocaleResource>
+			<LocaleResource Name="ApiKey.Hint">
+				<Value>Der in Ihrer BTCPay-Instanz generierte API-Schlüsselwert</Value>
+			</LocaleResource>
+			<LocaleResource Name="BtcPayStoreID">
+				<Value>BTCPay Store-ID</Value>
+			</LocaleResource>
+			<LocaleResource Name="BtcPayStoreID.Hint">
+				<Value>die BTCPay Store ID</Value>
+			</LocaleResource>
+			<LocaleResource Name="WebHookSecret">
+				<Value>WebHook-Geheimnis</Value>
+			</LocaleResource>
+			<LocaleResource Name="WebHookSecret.Hint">
+				<Value>Der in Ihrer BTCPay-Instanz generierte WebHook-Secret-Wert</Value>
+			</LocaleResource>
+			<LocaleResource Name="NoteRefund">
+				<Value>Es wurde eine Rückerstattung vorgenommen. Bitte folgen Sie diesem Link:</Value>
+			</LocaleResource>
+
+			<LocaleResource Name="PaymentInfo">
+				<Value>Nach Abschluss Ihrer Bestellung werden Sie an unseren BTCPay Server weitergeleitet, wo Sie die Zahlung für Ihre Bestellung tätigen können..</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+</Language>

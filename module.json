@@ -1,0 +1,12 @@
+{
+  "$schema": "../module.schema.json",
+  "Group": "Payment",
+  "SystemName": "Smartstore.BTCPay",
+  "FriendlyName": "Bitcoin payment with BTCPay",
+  "Description": "This plugin enables Bitcoin payment with your BTCPay instance",
+  "Version": "5.0.5",
+  "MinAppVersion": "5.0.5",
+  "Author": "Nisaba Solutions",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.Smartstore.BtcPay"
+}
