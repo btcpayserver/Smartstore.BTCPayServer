@@ -21,6 +21,11 @@
             @Html.Raw(T("Plugins.Smartstore.BtcPay.AdminInstruction"))
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
+        <div class="alert alert-info alert-dismissible">
+            @T("Plugins.Smartstore.BtcPay.WebHookInfo") &nbsp; @ViewBag.UrlWebHook<br/>
+            <i> @Html.Raw(T("Plugins.Smartstore.BtcPay.WebHookNote"))</i>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     </div>
     <div>
         <a href="https://btcpayserver.org" target="_blank">
@@ -44,52 +49,56 @@
 
     <div class="adminRow">
         <div class="adminTitle">
-                <smart-label asp-for="ApiKey" />
-            </div>
-            <div class="adminData">
-                <setting-editor asp-for="ApiKey" />
-                <span asp-validation-for="ApiKey"/>
-            </div>
+            <smart-label asp-for="BtcPayStoreID" />
+        </div>
+        <div class="adminData">
+            <setting-editor asp-for="BtcPayStoreID" />
+            <span asp-validation-for="BtcPayStoreID" />
+        </div>
     </div>
 
-        <div class="adminRow">
-            <div class="adminTitle">
-                <smart-label asp-for="BtcPayStoreID" />
-            </div>
-            <div class="adminData">
-                <setting-editor asp-for="BtcPayStoreID" />
-                <span asp-validation-for="BtcPayStoreID" />
-            </div>
-        </div>
 
-        <div class="adminRow">
-            <div class="adminTitle">
-                <smart-label asp-for="WebHookSecret" />
-            </div>
-            <div class="adminData">
-                <setting-editor asp-for="WebHookSecret" />
-                <span asp-validation-for="WebHookSecret" />
-            </div>
+    <div class="adminRow">
+        <div class="adminTitle">
+                <smart-label asp-for="ApiKey" />
         </div>
+        <div class="adminData">
+            <setting-editor asp-for="ApiKey" />
+            <span asp-validation-for="ApiKey"/>
+        </div>
+    </div>
 
-        <div class="adminRow">
-            <div class="adminTitle">
-                <smart-label asp-for="AdditionalFee" />
-            </div>
-            <div class="adminData">
-                <editor asp-for="AdditionalFee" sm-postfix="@ViewBag.StoreCurrencyCode" />
-                <span asp-validation-for="AdditionalFee"></span>
-            </div>
+
+    <div class="adminRow">
+        <div class="adminTitle">
+            <smart-label asp-for="WebHookSecret" />
         </div>
-        <div class="adminRow">
-            <div class="adminTitle">
-                <smart-label asp-for="AdditionalFeePercentage" />
-            </div>
-            <div class="adminData">
-                <editor asp-for="AdditionalFeePercentage" />
-                <span asp-validation-for="AdditionalFeePercentage"></span>
-            </div>
+        <div class="adminData">
+            <setting-editor asp-for="WebHookSecret" />
+            <span asp-validation-for="WebHookSecret" />
         </div>
+    </div>
+    <span></span>
+    <br/>
+
+    <div class="adminRow">
+        <div class="adminTitle">
+            <smart-label asp-for="AdditionalFee" />
+        </div>
+        <div class="adminData">
+            <editor asp-for="AdditionalFee" sm-postfix="@ViewBag.StoreCurrencyCode" />
+            <span asp-validation-for="AdditionalFee"></span>
+        </div>
+    </div>
+    <div class="adminRow">
+        <div class="adminTitle">
+            <smart-label asp-for="AdditionalFeePercentage" />
+        </div>
+        <div class="adminData">
+            <editor asp-for="AdditionalFeePercentage" />
+            <span asp-validation-for="AdditionalFeePercentage"></span>
+        </div>
+    </div>
 
 </div>
 

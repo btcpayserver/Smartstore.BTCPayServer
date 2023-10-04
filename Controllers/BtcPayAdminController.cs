@@ -7,6 +7,8 @@ using Smartstore.Web.Modelling.Settings;
 using Smartstore.BtcPay.Models;
 using Smartstore.BtcPay.Settings;
 using Smartstore.Core.Common.Services;
+using Smartstore.Core;
+using Autofac.Core;
 
 namespace Smartstore.BtcPay.Controllers
 {
@@ -15,13 +17,15 @@ namespace Smartstore.BtcPay.Controllers
     public class BtcPayAdminController : ModuleController
     {
 
+        private readonly ICommonServices _services;
         private readonly IProviderManager _providerManager;
         private readonly ICurrencyService _currencyService;
 
-        public BtcPayAdminController(IProviderManager providerManager, ICurrencyService currencyService)
+        public BtcPayAdminController(ICommonServices services, IProviderManager providerManager, ICurrencyService currencyService)
         {
             _providerManager = providerManager;
             _currencyService = currencyService;
+            _services = services;
         }
 
         [LoadSetting, AuthorizeAdmin]
@@ -30,6 +34,7 @@ namespace Smartstore.BtcPay.Controllers
             var model = MiniMapper.Map<BtcPaySettings, ConfigurationModel>(settings);
             ViewBag.Provider = _providerManager.GetProvider("Smartstore.BTCPay").Metadata;
             ViewBag.StoreCurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode ?? "EUR";
+            ViewBag.UrlWebHook = _services.StoreContext.CurrentStore.Url + "BtcPayHook/Process";
             return View(model);
         }
 
@@ -46,6 +51,7 @@ namespace Smartstore.BtcPay.Controllers
 
             return RedirectToAction(nameof(Configure));
         }
+
 
     }
 }

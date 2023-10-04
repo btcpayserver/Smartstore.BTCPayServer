@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Smartstore.BTCPay.Models
+﻿namespace Smartstore.BTCPay.Models
 {
     public struct BtcPayPullPaymentModel
     {

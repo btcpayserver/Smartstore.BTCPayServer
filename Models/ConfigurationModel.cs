@@ -6,15 +6,20 @@ namespace Smartstore.BtcPay.Models
     {
 
         [LocalizedDisplay("*BtcPayUrl")]
+        //[Url]
+        [Required]
         public string BtcPayUrl { get; set; }
 
         [LocalizedDisplay("*ApiKey")]
+        [Required]
         public string ApiKey { get; set; }
 
         [LocalizedDisplay("*BtcPayStoreID")]
+        [Required]
         public string BtcPayStoreID { get; set; }
 
         [LocalizedDisplay("*WebHookSecret")]
+        [Required]
         public string WebHookSecret { get; set; }
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFee")]

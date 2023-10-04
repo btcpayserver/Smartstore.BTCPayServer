@@ -21,12 +21,32 @@
 				<Value>
 					<![CDATA[
 <div class="mb-1">Geben Sie unten Ihre Daten ein, um dieses Plugin zu konfigurieren:</div>
-<ul><li>So erstellen Sie den BTCPay-API-Schlüssel, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">siehe hier</a>.</li>
+<ul><li>So erstellen Sie den BTCPay-API-Schlüssel, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">siehe hier</a>..<br/>
+    <i>Hinweis: Wenn Sie die Rückerstattungsfunktion nutzen möchten, müssen Sie auch das Recht „Modify your stores“ hinzufügen.</i>
+    </li>
 <li>So erstellen Sie den BTCPay-Web-Hook, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">siehe hier</a>. (Verwenden Sie das von BTCPay generierte Standardgeheimnis) </li>
-<li>Bei BTCPay Store settings / General / Payment : Wählen Sie die Option <i>Allow anyone to create invoice</i> </li></ul> ]]>
+</ul> ]]>
 				</Value>
 			</LocaleResource>
-			<LocaleResource Name="BtcPayUrl">
+
+
+                <LocaleResource Name="WebHookNote">
+                    <Value>
+                        <![CDATA[
+Hinweis: Beim Testen des Webhooks von BTCPay sollte ein HTTP 422-Fehler angezeigt werden.<br/>
+Dies liegt daran, dass BTCPay leere Daten sendet, während das SmartStore-Plugin echte Daten erwartet.<br/>
+Dieser Fehler weist daher darauf hin, dass der Webhook tatsächlich über BTCPay zugänglich ist.<br/>
+Bei einer echten Transaktion können wir daher von einer korrekten Abwicklung ausgehen.
+             ]]>
+                    </Value>
+                </LocaleResource>
+
+
+                <LocaleResource Name="WebHookInfo">
+                <Value>Hier ist die URL, die für die WebHook-Erstellung in BTCPay festgelegt werden muss: </Value>
+            </LocaleResource>
+                
+            <LocaleResource Name="BtcPayUrl">
 				<Value>BTCPay-URL</Value>
 			</LocaleResource>
 			<LocaleResource Name="BtcPayUrl.Hint">
