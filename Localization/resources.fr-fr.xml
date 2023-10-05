@@ -22,7 +22,9 @@
                     <![CDATA[
 <div class="mb-1">Veuillez saisir les données suivantes configurer ce plugin :</div>
 <ul><li>Pour créer la clé API BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">lisez ceci</a>.<br/>
-    <i>Note: Si vous voulez utilisez la fonction de Remboursement, vous devez aussi ajouter le droit "Modify your stores".</i>
+    <i>Note: Si vous voulez utilisez la fonction de Remboursement, vous devez aussi ajouter le droit "Modify your stores".<br/>
+    Après un remboursement, une note de commande est créée. Elle indique le lien BTCPay où le client pourra demander son remboursement.
+    </i>
     </li>
     <li>Pour créer le Web hook BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lisez ceci</a>. (utilisez le code secret par défaut généré par BTCPay) </li>
 </ul> ]]>

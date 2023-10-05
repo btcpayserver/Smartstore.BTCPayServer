@@ -22,7 +22,9 @@
 					<![CDATA[
 <div class="mb-1">Geben Sie unten Ihre Daten ein, um dieses Plugin zu konfigurieren:</div>
 <ul><li>So erstellen Sie den BTCPay-API-Schlüssel, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">siehe hier</a>..<br/>
-    <i>Hinweis: Wenn Sie die Rückerstattungsfunktion nutzen möchten, müssen Sie auch das Recht „Modify your stores“ hinzufügen.</i>
+    <i>Hinweis: Wenn Sie die Rückerstattungsfunktion nutzen möchten, müssen Sie auch das Recht „Modify your stores“ hinzufügen.</br>
+    Nach einer Rückerstattung wird eine Bestellnotiz erstellt. Es zeigt den BTCPay-Link an, über den der Kunde seine Rückerstattung beantragen kann.
+    </i>
     </li>
 <li>So erstellen Sie den BTCPay-Web-Hook, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">siehe hier</a>. (Verwenden Sie das von BTCPay generierte Standardgeheimnis) </li>
 </ul> ]]>
