@@ -11,16 +11,13 @@ namespace Smartstore.BtcPay.Models
         public string BtcPayUrl { get; set; }
 
         [LocalizedDisplay("*ApiKey")]
-        [Required]
-        public string ApiKey { get; set; }
+        public string? ApiKey { get; set; }
 
         [LocalizedDisplay("*BtcPayStoreID")]
-        [Required]
-        public string BtcPayStoreID { get; set; }
+        public string? BtcPayStoreID { get; set; }
 
         [LocalizedDisplay("*WebHookSecret")]
-        [Required]
-        public string WebHookSecret { get; set; }
+        public string? WebHookSecret { get; set; }
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFee")]
         public decimal AdditionalFee { get; set; }

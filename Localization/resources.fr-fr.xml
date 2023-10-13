@@ -27,6 +27,8 @@
     </i>
     </li>
     <li>Pour créer le Web hook BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lisez ceci</a>. (utilisez le code secret par défaut généré par BTCPay) </li>
+    <li>Les champs "BTCPay Url", "Clé API", "BTCPay Store ID" et "WebHook Secret" doivent obligatoirement être renseignés.</li>
+    <li>Vous pouvez configurer automatiquement la clé API en cliquant sur le lien correspondant, mais il faut que le paramètre "BTCPay Url" soit renseigné et sauvegardé.</li>
 </ul> ]]>
                 </Value>
             </LocaleResource>
@@ -56,10 +58,13 @@ Avec une vraie transaction, on peut donc s'attendre à un fonctionnement correct
                 <Value>L'URL de votre instance BTCPay</Value>
             </LocaleResource>
             <LocaleResource Name="ApiKey">
-                <Value>Api Key</Value>
+                <Value>Clé API</Value>
             </LocaleResource>
             <LocaleResource Name="ApiKey.Hint">
                 <Value>La valeur de la clé API générée dans votre instance BTCPay</Value>
+            </LocaleResource>
+            <LocaleResource Name="CreateApiKey">
+                <Value>Créer la clé API automatiquement</Value>
             </LocaleResource>
             <LocaleResource Name="BtcPayStoreID">
                 <Value>BTCPay Store ID</Value>
@@ -72,6 +77,12 @@ Avec une vraie transaction, on peut donc s'attendre à un fonctionnement correct
             </LocaleResource>
             <LocaleResource Name="WebHookSecret.Hint">
                 <Value>La valeur du WebHook Secret généré dans votre instance BTCPay</Value>
+            </LocaleResource>
+            <LocaleResource Name="WebHookUrl">
+                <Value>WebHook Url</Value>
+            </LocaleResource>
+            <LocaleResource Name="CreateWebhook">
+                <Value>Créer le WebHook</Value>
             </LocaleResource>
             <LocaleResource Name="PaymentInfo">
                 <Value>Après avoir complété la commande, vous serez redirigé vers l'instance BTCPay du marchand, d'où vous pourrez effectuer le paiement Bitcoin de votre commande.</Value>

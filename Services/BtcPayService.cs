@@ -134,28 +134,6 @@ namespace Smartstore.BtcPay.Services
                     }
                 }
 
-
-                /*string sUrl = settings.BtcPayUrl.EndsWith("/") ? settings.BtcPayUrl : settings.BtcPayUrl + "/";
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create($"{sUrl}api/v1/stores/{settings.BtcPayStoreID}/invoices/{sBtcPayInvoiceID}/refund");
-                req.Method = "POST";
-                req.ContentType = "application/json; charset=utf-8";
-                req.Accept = "application/json";
-                req.Headers.Add("Authorization", $"token {settings.ApiKey}");
-
-                using (var wrt = new StreamWriter(req.GetRequestStream()))
-                {
-                    wrt.Write(refundJson);
-                }
-
-                string sRep;
-                using (var rep = req.GetResponse())
-                {
-                    using (var rdr = new StreamReader(rep.GetResponseStream()))
-                    {
-                        sRep = rdr.ReadToEnd();
-                    }
-                }*/
-
                 dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
 
                 return JsonRep.viewLink;

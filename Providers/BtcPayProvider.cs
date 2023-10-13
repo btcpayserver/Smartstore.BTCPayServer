@@ -180,7 +180,7 @@ namespace Smartstore.BtcPay.Providers
             if (order == null)
                 throw new ArgumentNullException("order");
 
-            if (order.PaymentStatus == PaymentStatus.Pending && (DateTime.UtcNow - order.CreatedOnUtc).TotalSeconds > 5)
+            if (order.PaymentStatus == PaymentStatus.Pending)
             {
                 return Task.FromResult(true);
             }

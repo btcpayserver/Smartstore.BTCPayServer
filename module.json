@@ -4,7 +4,7 @@
   "SystemName": "Smartstore.BTCPay",
   "FriendlyName": "Bitcoin payment with BTCPay",
   "Description": "This plugin enables Bitcoin payment with your BTCPay instance",
-  "Version": "5.0.5",
+  "Version": "5.0.6",
   "MinAppVersion": "5.0.5",
   "Author": "Nisaba Solutions",
   "Order": 1,

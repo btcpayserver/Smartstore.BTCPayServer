@@ -1,6 +1,4 @@
-﻿@using static Smartstore.BtcPay.Module;
-
-@model ConfigurationModel
+﻿@model ConfigurationModel
 @{
     Layout = "_ConfigureProvider";
 }
@@ -21,11 +19,6 @@
             @Html.Raw(T("Plugins.Smartstore.BtcPay.AdminInstruction"))
             <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
-        <div class="alert alert-info alert-dismissible">
-            @T("Plugins.Smartstore.BtcPay.WebHookInfo") &nbsp; @ViewBag.UrlWebHook<br/>
-            <i> @Html.Raw(T("Plugins.Smartstore.BtcPay.WebHookNote"))</i>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>
     </div>
     <div>
         <a href="https://btcpayserver.org" target="_blank">
@@ -35,13 +28,13 @@
 </div>
 
 <form asp-action="Configure">
-    <!--<div asp-validation-summary="All"/>-->
-<div class="adminContent">
+    <div asp-validation-summary="ModelOnly" />
+    <div class="adminContent">
     <div class="adminRow">
         <div class="adminTitle">
                 <smart-label asp-for="BtcPayUrl" />
         </div>
-            <div class="adminData">
+        <div class="adminData">
                 <setting-editor asp-for="BtcPayUrl" />
                 <span asp-validation-for="BtcPayUrl" />
         </div>
@@ -66,8 +59,42 @@
             <setting-editor asp-for="ApiKey" />
             <span asp-validation-for="ApiKey"/>
         </div>
+        <div>
+                <a href="@ViewBag.UrlBtcApiKey">@T("Plugins.Smartstore.BtcPay.CreateApiKey")</a>
+        </div>
+     </div>
+     </div>
+
+    <br/>
+    <div class="alert alert-info alert-dismissible">
+        @T("Plugins.Smartstore.BtcPay.WebHookInfo") &nbsp; @ViewBag.UrlWebHook<br />
+        <i> @Html.Raw(T("Plugins.Smartstore.BtcPay.WebHookNote"))</i>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
 
+    <div class="adminContent">
+     <div class="adminRow">
+            <div class="adminTitle">
+                <label>@T("Plugins.Smartstore.BtcPay.WebHookUrl")</label>
+            </div>
+            <div class="adminData">
+                <div class="input-group">
+                    <input value="@ViewBag.UrlWebHook" readonly />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" title="@T("Common.Copy")" onclick=" navigator.clipboard.writeText('@ViewBag.UrlWebHook')">
+                            <i class="fa fa-copy"></i>
+                        </button>
+                    </div>
+                    <!-- <span class="input-group-append">
+                        <button type="submit" id="createwebhook" name="createwebhook" value="createwebhook" class="btn btn-outline-secondary"
+                                attr-disabled='(!Model.BtcPayUrl.HasValue() || !Model.ApiKey.HasValue(), "disabled")'>
+                            <i class="fa fa-cog"></i>
+                            <span>@T("Plugins.Smartstore.BtcPay.CreateWebhook")</span>
+                        </button>
+                    </span> -->
+                </div>
+            </div>
+        </div>
 
     <div class="adminRow">
         <div class="adminTitle">
