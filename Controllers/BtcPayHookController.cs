@@ -41,12 +41,10 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                 var BtcPaySecret = BtcPaySig.Split('=')[1];
 
                 string OrderGuid;
-                int StoreID;
                 string BtcPayEvent;
                 try
                 {
                     OrderGuid = jsonData.metadata.orderId ?? string.Empty;
-                    StoreID = jsonData.metadata.buyerZip ?? 0;
                     BtcPayEvent = jsonData.type ?? string.Empty;
                 }
                 catch (Exception ex)
@@ -55,7 +53,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
 
-                if (String.IsNullOrEmpty(OrderGuid) || StoreID == 0 || string.IsNullOrEmpty(BtcPayEvent))
+                if (String.IsNullOrEmpty(OrderGuid) || string.IsNullOrEmpty(BtcPayEvent))
                 {
                     Logger.Error("Missing fields in request");
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);

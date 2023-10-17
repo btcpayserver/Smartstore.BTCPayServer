@@ -28,7 +28,7 @@
     </li>
     <li>Pour créer le Web hook BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lisez ceci</a>. (utilisez le code secret par défaut généré par BTCPay) </li>
     <li>Les champs "BTCPay Url", "Clé API", "BTCPay Store ID" et "WebHook Secret" doivent obligatoirement être renseignés.</li>
-    <li>Vous pouvez configurer automatiquement la clé API en cliquant sur le lien correspondant, mais il faut que le paramètre "BTCPay Url" soit renseigné et sauvegardé.</li>
+    <li>Vous pouvez configurer automatiquement la clé API en cliquant sur le lien correspondant, mais il faut que le paramètre "BTCPay Url" soit d'abord renseigné et sauvegardé.</li>
 </ul> ]]>
                 </Value>
             </LocaleResource>

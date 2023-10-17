@@ -44,7 +44,6 @@ namespace Smartstore.BtcPay.Services
                     {
                         buyerEmail = paymentData.BuyerEmail,
                         buyerName = paymentData.BuyerName,
-                        buyerZip = paymentData.StoreID.ToString(),
                         orderId = paymentData.OrderID,
                         itemDesc = paymentData.Description
                     }

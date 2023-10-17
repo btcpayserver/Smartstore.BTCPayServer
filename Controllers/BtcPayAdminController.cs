@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using static Smartstore.Core.Security.Permissions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Utilities.Collections;
+using Microsoft.Extensions.Logging;
 
 namespace Smartstore.BtcPay.Controllers
 {
@@ -43,15 +44,16 @@ namespace Smartstore.BtcPay.Controllers
         public IActionResult Configure(BtcPaySettings settings)
         {
             var model = MiniMapper.Map<BtcPaySettings, ConfigurationModel>(settings);
+            var myStore = _services.StoreContext.CurrentStore;
 
             ViewBag.Provider = _providerManager.GetProvider("Smartstore.BTCPay").Metadata;
             ViewBag.StoreCurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode ?? "EUR";
-            ViewBag.UrlWebHook = _services.StoreContext.CurrentStore.Url + "BtcPayHook/Process";
+            ViewBag.UrlWebHook = myStore.Url + "BtcPayHook/Process";
 
             var sUrl = "";
             if (!string.IsNullOrEmpty(model.BtcPayUrl))
             {
-                var myStore = _services.StoreContext.CurrentStore;
+                
                 sUrl = model.BtcPayUrl + (model.BtcPayUrl.EndsWith("/") ? "" : "/");
                 sUrl += $"api-keys/authorize?applicationName={myStore.Name.Replace(" ", "")}&applicationIdentifier=SmartStore{myStore.Id}&selectiveStores=true"
                      + $"&redirect={myStore.Url}admin/btcpay/getautomaticapikeyconfig&permissions=btcpay.store.canmodifystoresettings";
@@ -87,8 +89,9 @@ namespace Smartstore.BtcPay.Controllers
 
                 settings.ApiKey = sKey;                  
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.Error(ex.Message);
             }
             return RedirectToAction(nameof(Configure), settings);
 
