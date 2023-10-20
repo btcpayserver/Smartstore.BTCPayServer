@@ -42,10 +42,12 @@ namespace Smartstore.SwissBitcoinPay.Controllers
 
                 string OrderGuid;
                 string BtcPayEvent;
+                string InvoiceID;
                 try
                 {
                     OrderGuid = jsonData.metadata.orderId ?? string.Empty;
                     BtcPayEvent = jsonData.type ?? string.Empty;
+                    InvoiceID = jsonData.invoiceId ?? string.Empty;
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +55,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
 
-                if (String.IsNullOrEmpty(OrderGuid) || string.IsNullOrEmpty(BtcPayEvent))
+                if (String.IsNullOrEmpty(OrderGuid) || string.IsNullOrEmpty(BtcPayEvent) || string.IsNullOrEmpty(InvoiceID))
                 {
                     Logger.Error("Missing fields in request");
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
@@ -77,7 +79,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
 
                 switch (BtcPayEvent)
                 {
-                    case "InvoiceReceivedPayment":
+                    //case "InvoiceReceivedPayment":
                     case "InvoiceSettled":
                         order.PaymentStatus = PaymentStatus.Paid;
                         order.AuthorizationTransactionId = jsonData.invoiceId;
@@ -89,7 +91,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                         break;
                 }
                 order.HasNewPaymentNotification = true;
-                order.AddOrderNote($"BTCPay Event: {BtcPayEvent} - PaymentStatus: {order.PaymentStatus.ToString()}", true);
+                order.AddOrderNote($"BTCPay Event: {BtcPayEvent} - BTCPay Invoice: {InvoiceID} - PaymentStatus: {order.PaymentStatus.ToString()}", true);
 
                 await _db.SaveChangesAsync();
                 return Ok();

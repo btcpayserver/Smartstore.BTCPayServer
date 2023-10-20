@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq.Expressions;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
+using NuGet.Protocol.Core.Types;
 using Smartstore.BtcPay.Models;
 using Smartstore.BtcPay.Settings;
 using Smartstore.Core.Checkout.Payment;
@@ -27,6 +29,7 @@ namespace Smartstore.BtcPay.Services
         public string CreateInvoice(BtcPaySettings settings, PaymentDataModel paymentData)
         {
 
+            var sRep = string.Empty;
             try
             {
                 var invoice = new BtcPayInvoiceModel()
@@ -61,29 +64,43 @@ namespace Smartstore.BtcPay.Services
                 };
                 webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
 
-                string sRep;
                 using (var rep = client.SendAsync(webRequest).Result)
                 {
-                    rep.EnsureSuccessStatusCode();
-                    using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
+                    try
                     {
-                        sRep = rdr.ReadToEnd();
+                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
+                        {
+                            sRep = rdr.ReadToEnd();
+                        }
                     }
+                    catch { }
+                    rep.EnsureSuccessStatusCode();
                 }
 
                 dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
                 return JsonRep.checkoutLink;
 
             }
+            catch (HttpRequestException ex)
+            {
+                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
+                dynamic JsonRep;
+                try { 
+                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
+                    sMsg += $" - {JsonRep.message}";
+                } catch { }
+
+                throw new Exception (sMsg);
+            }
             catch
             {
                 throw;
             }
-
         }
 
         public string CreateRefund(BtcPaySettings settings, RefundPaymentRequest refundRequest)
         {
+            var sRep = string.Empty;
             try
             {
                 BtcPayRefundModel refund;
@@ -98,14 +115,14 @@ namespace Smartstore.BtcPay.Services
                         customAmount = refundRequest.AmountToRefund.Amount,
                         customCurrency = refundRequest.Order.CustomerCurrencyCode
                     };
-                }else
+                } else
                 {
                     refund = new BtcPayRefundModel()
                     {
                         name = "Refund order " + refundRequest.Order.OrderGuid,
                         description = "Full",
                         paymentMethod = "BTC",
-                        refundVariant = "RateThen"
+                        refundVariant = "Fiat"
                     };
                 };
 
@@ -123,25 +140,40 @@ namespace Smartstore.BtcPay.Services
                 };
                 webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
 
-                string sRep;
                 using (var rep = client.SendAsync(webRequest).Result)
                 {
+                    try {
+                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
+                        {
+                            sRep = rdr.ReadToEnd();
+                        }
+                    } catch { }
+                    
                     rep.EnsureSuccessStatusCode();
-                    using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
-                    {
-                        sRep = rdr.ReadToEnd();
-                    }
                 }
 
                 dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
 
                 return JsonRep.viewLink;
             }
+            catch (HttpRequestException ex)
+            {
+                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
+                dynamic JsonRep;
+                try
+                {
+                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
+                    sMsg += $" - {JsonRep.message}";
+                }
+                catch { }
+
+                throw new Exception(sMsg);
+            }
             catch
             {
-
                 throw;
             }
+
         }
     }
 }

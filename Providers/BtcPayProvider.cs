@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Smartstore;
 using Smartstore.BtcPay.Components;
 using Smartstore.BtcPay.Controllers;
 using Smartstore.BtcPay.Models;
