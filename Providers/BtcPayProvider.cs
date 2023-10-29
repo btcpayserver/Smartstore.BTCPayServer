@@ -150,7 +150,7 @@ namespace Smartstore.BtcPay.Providers
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
-                throw new PaymentException(ex.Message);
+                throw new PaymentException(_localizationService.GetResource("Plugins.Smartstore.BtcPay.PaymentError"));
             }
             return await Task.FromResult(result);
         }
@@ -208,7 +208,7 @@ namespace Smartstore.BtcPay.Providers
             catch (Exception ex)
             {
                 Logger.LogError(ex, ex.Message);
-                throw new PaymentException(ex.Message);
+                throw new PaymentException(_localizationService.GetResource("Plugins.Smartstore.BtcPay.PaymentError"));
             }
 
             return Task.FromResult(result);

@@ -1,6 +1,6 @@
 ﻿<Language Name="Deutsch" IsDefault="false" IsRightToLeft="false">
 	<LocaleResource Name="Plugins.FriendlyName.SmartStore.BtcPay" AppendRootKey="false">
-		<Value>BTCPay</Value>
+		<Value>Bezahlen Sie mit Bitcoin</Value>
 	</LocaleResource>
 	<LocaleResource Name="Plugins.Description.SmartStore.BtcPay" AppendRootKey="false">
 		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BTCPay Server</Value>
@@ -90,6 +90,11 @@ Bei einer echten Transaktion können wir daher von einer korrekten Abwicklung au
 			<LocaleResource Name="PaymentInfo">
 				<Value>Nach Abschluss Ihrer Bestellung werden Sie an unseren BTCPay Server weitergeleitet, wo Sie die Zahlung für Ihre Bestellung tätigen können..</Value>
 			</LocaleResource>
-		</Children>
+
+            <LocaleResource Name="PaymentError">
+                <Value>Fehler bei der Verarbeitung der Zahlung. Bitte versuchen Sie es erneut und kontaktieren Sie uns, wenn das Problem weiterhin besteht.</Value>
+            </LocaleResource>
+
+            </Children>
 	</LocaleResource>
 </Language>
