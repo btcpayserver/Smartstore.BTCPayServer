@@ -29,41 +29,41 @@
 
 <form asp-action="Configure">
     <div asp-validation-summary="ModelOnly" />
-    <div class="adminContent">
-    <div class="adminRow">
-        <div class="adminTitle">
-                <smart-label asp-for="BtcPayUrl" />
+        <div class="adminContent">
+        <div class="adminRow">
+            <div class="adminTitle">
+                    <smart-label asp-for="BtcPayUrl" />
+            </div>
+            <div class="adminData">
+                    <setting-editor asp-for="BtcPayUrl" />
+                    <span asp-validation-for="BtcPayUrl" />
+            </div>
         </div>
-        <div class="adminData">
-                <setting-editor asp-for="BtcPayUrl" />
-                <span asp-validation-for="BtcPayUrl" />
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                    <smart-label asp-for="ApiKey" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="ApiKey" />
+                <span asp-validation-for="ApiKey"/>
+            </div>
+            &nbsp;
+                    <a href="@ViewBag.UrlBtcApiKey">@T("Plugins.Smartstore.BtcPay.CreateApiKey")</a>
+         </div>
+
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="BtcPayStoreID" />
+            </div>
+            <div class="adminData">
+                <setting-editor asp-for="BtcPayStoreID" />
+                <span asp-validation-for="BtcPayStoreID" />
+            </div>
         </div>
+
     </div>
-
-    <div class="adminRow">
-        <div class="adminTitle">
-            <smart-label asp-for="BtcPayStoreID" />
-        </div>
-        <div class="adminData">
-            <setting-editor asp-for="BtcPayStoreID" />
-            <span asp-validation-for="BtcPayStoreID" />
-        </div>
-    </div>
-
-
-    <div class="adminRow">
-        <div class="adminTitle">
-                <smart-label asp-for="ApiKey" />
-        </div>
-        <div class="adminData">
-            <setting-editor asp-for="ApiKey" />
-            <span asp-validation-for="ApiKey"/>
-        </div>
-        <div>
-                <a href="@ViewBag.UrlBtcApiKey">@T("Plugins.Smartstore.BtcPay.CreateApiKey")</a>
-        </div>
-     </div>
-     </div>
 
     <br/>
     <div class="alert alert-info alert-dismissible">
@@ -81,17 +81,12 @@
                 <div class="input-group">
                     <input value="@ViewBag.UrlWebHook" readonly />
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" title="@T("Common.Copy")" onclick=" navigator.clipboard.writeText('@ViewBag.UrlWebHook')">
+                        <button class="btn btn-outline-secondary" title="@T("Common.Copy")" onclick="navigator.clipboard.writeText('@ViewBag.UrlWebHook')">
                             <i class="fa fa-copy"></i>
                         </button>
                     </div>
-                    <!-- <span class="input-group-append">
-                        <button type="submit" id="createwebhook" name="createwebhook" value="createwebhook" class="btn btn-outline-secondary"
-                                attr-disabled='(!Model.BtcPayUrl.HasValue() || !Model.ApiKey.HasValue(), "disabled")'>
-                            <i class="fa fa-cog"></i>
-                            <span>@T("Plugins.Smartstore.BtcPay.CreateWebhook")</span>
-                        </button>
-                    </span> -->
+                    &nbsp;
+                    <a href="@ViewBag.UrlCreateWebHook">@T("Plugins.Smartstore.BtcPay.CreateWebhook")</a>
                 </div>
             </div>
         </div>

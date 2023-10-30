@@ -4,10 +4,12 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using NuGet.Protocol.Core.Types;
 using Smartstore.BtcPay.Models;
 using Smartstore.BtcPay.Settings;
+using Smartstore.BTCPay.Models;
 using Smartstore.Core.Checkout.Payment;
 
 namespace Smartstore.BtcPay.Services
@@ -174,6 +176,65 @@ namespace Smartstore.BtcPay.Services
                 throw;
             }
 
+        }
+
+        public string CreateWebHook(BtcPaySettings settings, string WebHookUrl)
+        {
+            var sRep = string.Empty;
+
+            try { 
+                BtcPayHookModel hook = new BtcPayHookModel()
+                {
+                    url = WebHookUrl
+                };
+                var hookJson = JsonConvert.SerializeObject(hook, Formatting.None);
+
+                string sUrl = settings.BtcPayUrl.EndsWith("/") ? settings.BtcPayUrl : settings.BtcPayUrl + "/";
+                var client = new HttpClient()
+                {
+                    BaseAddress = new Uri($"{sUrl}api/v1/stores/{settings.BtcPayStoreID}/")
+                };
+                var webRequest = new HttpRequestMessage(HttpMethod.Post, "webhooks")
+                {
+                    Content = new StringContent(hookJson, Encoding.UTF8, "application/json"),
+                };
+                webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
+
+                using (var rep = client.SendAsync(webRequest).Result)
+                {
+                    try
+                    {
+                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
+                        {
+                            sRep = rdr.ReadToEnd();
+                        }
+                    }
+                    catch { }
+
+                    rep.EnsureSuccessStatusCode();
+                }
+
+                dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
+
+                return JsonRep.secret;
+            }
+            catch (HttpRequestException ex)
+            {
+                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
+                dynamic JsonRep;
+                try
+                {
+                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
+                    sMsg += $" - {JsonRep.message}";
+                }
+                catch { }
+
+                throw new Exception(sMsg);
+            }
+            catch
+            {
+                    throw;
+            }
         }
     }
 }

@@ -29,6 +29,7 @@
 <li>So erstellen Sie den BTCPay-Web-Hook, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">siehe hier</a>. (Verwenden Sie das von BTCPay generierte Standardgeheimnis) </li>
 <li>Die Felder „BTCPay Url“, „API Key“, „BTCPay Store ID“ und „WebHook Secret“ müssen ausgefüllt werden.</li>
 <li>Sie können den API-Schlüssel automatisch konfigurieren, indem Sie auf den entsprechenden Link klicken, allerdings muss der Parameter „BTCPay Url“ eingegeben und gespeichert werden.</li>
+<li>Sie können den Webhook auch automatisch erstellen, allerdings müssen zunächst die Parameter „BTCPay Url“, „Api Key“ und „BTCPay StoreID“ eingegeben und gespeichert werden.</li>
 </ul> ]]>
 				</Value>
 			</LocaleResource>
@@ -78,7 +79,7 @@ Bei einer echten Transaktion können wir daher von einer korrekten Abwicklung au
 				<Value>Der in Ihrer BTCPay-Instanz generierte WebHook-Secret-Wert</Value>
 			</LocaleResource>
             <LocaleResource Name="CreateWebhook">
-                <Value>Webhook erstellen</Value>
+                <Value>Webhook automatisch erstellen</Value>
             </LocaleResource>
             <LocaleResource Name="WebHookUrl">
                 <Value>WebHook-Url</Value>

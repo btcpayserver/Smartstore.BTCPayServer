@@ -16,6 +16,8 @@ using static Smartstore.Core.Security.Permissions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Utilities.Collections;
 using Microsoft.Extensions.Logging;
+using NuGet.Configuration;
+using Smartstore.BtcPay.Services;
 
 namespace Smartstore.BtcPay.Controllers
 {
@@ -59,7 +61,7 @@ namespace Smartstore.BtcPay.Controllers
                      + $"&redirect={myStore.Url}admin/btcpay/getautomaticapikeyconfig&permissions=btcpay.store.canmodifystoresettings";
             }
             ViewBag.UrlBtcApiKey = sUrl;
-
+            ViewBag.UrlCreateWebHook = myStore.Url + "admin/btcpay/createwebhook/";
             return View(model);
         }
 
@@ -78,21 +80,50 @@ namespace Smartstore.BtcPay.Controllers
         }
 
 
-        [HttpPost, AuthorizeAdmin]
+        //[HttpPost, AuthorizeAdmin]
+        [HttpPost]
         public async Task<IActionResult> GetAutomaticApiKeyConfig()
         {
            var settings = await _services.SettingFactory.LoadSettingsAsync<BtcPaySettings>(_services.StoreContext.CurrentStore.Id);
            try
             {
                 string responseStr = await new StreamReader(Request.Body).ReadToEndAsync();
-                var sKey = responseStr.Split('&').First(a => a.StartsWith("apiKey")).Split('=')[1];
+                var tblResponse = responseStr.Split('&');
+                var sKey = (tblResponse.FirstOrDefault(a => a.StartsWith("apiKey")) ?? "").Split('=')[1];
+                var sStoreID = (tblResponse.FirstOrDefault(a => a.StartsWith("permissions")) ?? "").Split('=')[1].Split("%3A")[1];
 
-                settings.ApiKey = sKey;                  
+                settings.ApiKey = sKey;
+                settings.BtcPayStoreID = sStoreID;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
             }
+            return RedirectToAction(nameof(Configure), settings);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateWebHook()
+        {
+            var settings = await _services.SettingFactory.LoadSettingsAsync<BtcPaySettings>(_services.StoreContext.CurrentStore.Id);
+            if (! (string.IsNullOrEmpty(settings.BtcPayStoreID)
+                   || string.IsNullOrEmpty(settings.BtcPayUrl)
+                   || string.IsNullOrEmpty(settings.ApiKey)))
+            {
+                try
+                {
+                    var myStore = _services.StoreContext.CurrentStore;
+                    BtcPayService apiService = new BtcPayService();
+                    settings.WebHookSecret = apiService.CreateWebHook(settings, myStore.Url + "BtcPayHook/Process");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.Message);
+                }
+            }
+
+
             return RedirectToAction(nameof(Configure), settings);
 
         }
