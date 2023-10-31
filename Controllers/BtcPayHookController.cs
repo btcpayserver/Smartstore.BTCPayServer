@@ -80,6 +80,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                 }
 
                 string sDesc = "";
+                bool bShowToCustomer = true;
 
                 switch (BtcPayEvent)
                 {
@@ -87,11 +88,12 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                         bool bAtferExpiration = (bool)jsonData.afterExpiration;
                         sDesc = ", Invoice (partial) payment incoming (unconfirmed)"
                                 + (bAtferExpiration ? " after invoice was already expired." : ". Waiting for settlement.");
+                        bShowToCustomer = false;
                         break;
                     case "InvoicePaymentSettled":
                         if (order.OrderStatus == OrderStatus.Cancelled)
                             sDesc = ", Invoice fully settled after invoice was already canceled. Needs manual checking.";
-
+                        bShowToCustomer = false;
                         break;
                     case "InvoiceProcessing": // The invoice is paid in full.
                         bool bOverPaid = (bool)jsonData.overPaid;
@@ -123,7 +125,7 @@ namespace Smartstore.SwissBitcoinPay.Controllers
                         break;
                 }
                 order.HasNewPaymentNotification = true;
-                order.AddOrderNote($"BTCPay Invoice: {InvoiceID} - BTCPay Event: {BtcPayEvent} {sDesc} - PaymentStatus: {order.PaymentStatus.ToString()}", true);
+                order.AddOrderNote($"BTCPay Invoice: {InvoiceID} - BTCPay Event: {BtcPayEvent} {sDesc} - PaymentStatus: {order.PaymentStatus.ToString()}", bShowToCustomer);
 
                 await _db.SaveChangesAsync();
                 return Ok();

@@ -52,6 +52,13 @@ namespace Smartstore.BtcPay.Controllers
             ViewBag.StoreCurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode ?? "EUR";
             ViewBag.UrlWebHook = myStore.Url + "BtcPayHook/Process";
 
+            var sViewMsg = HttpContext.Session.GetString("ViewMsg");
+            if (!string.IsNullOrEmpty(sViewMsg))
+            {
+                ViewBag.ViewMsg = sViewMsg;
+                HttpContext.Session.SetString("ViewMsg", "");
+            }
+
             var sUrl = "";
             if (!string.IsNullOrEmpty(model.BtcPayUrl))
             {
@@ -76,6 +83,7 @@ namespace Smartstore.BtcPay.Controllers
             ModelState.Clear();
             MiniMapper.Map(model, settings);
 
+            HttpContext.Session.SetString("ViewMsg", "Save OK");
             return RedirectToAction(nameof(Configure));
         }
 
@@ -94,9 +102,12 @@ namespace Smartstore.BtcPay.Controllers
 
                 settings.ApiKey = sKey;
                 settings.BtcPayStoreID = sStoreID;
+
+                HttpContext.Session.SetString("ViewMsg", "API Key and Store ID set with success. Don't forget to click on <b>Save</b> button to update data !");
             }
             catch (Exception ex)
             {
+                HttpContext.Session.SetString("ViewMsg", "Error during API Key creation !");
                 Logger.Error(ex.Message);
             }
             return RedirectToAction(nameof(Configure), settings);
@@ -106,26 +117,26 @@ namespace Smartstore.BtcPay.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateWebHook()
         {
-            var settings = await _services.SettingFactory.LoadSettingsAsync<BtcPaySettings>(_services.StoreContext.CurrentStore.Id);
+            var myStore = _services.StoreContext.CurrentStore;
+            var settings = await _services.SettingFactory.LoadSettingsAsync<BtcPaySettings>(myStore.Id);
+
             if (! (string.IsNullOrEmpty(settings.BtcPayStoreID)
                    || string.IsNullOrEmpty(settings.BtcPayUrl)
                    || string.IsNullOrEmpty(settings.ApiKey)))
             {
                 try
                 {
-                    var myStore = _services.StoreContext.CurrentStore;
                     BtcPayService apiService = new BtcPayService();
                     settings.WebHookSecret = apiService.CreateWebHook(settings, myStore.Url + "BtcPayHook/Process");
+                    HttpContext.Session.SetString("ViewMsg", "WebHook created successfully. Don't forget to click on <b>Save</b> button to update data !");
                 }
                 catch (Exception ex)
                 {
+                    HttpContext.Session.SetString("ViewMsg", "Error during WebHook creation !");
                     Logger.Error(ex.Message);
-                }
+              }
             }
-
-
             return RedirectToAction(nameof(Configure), settings);
-
         }
 
     }
