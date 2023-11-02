@@ -59,6 +59,13 @@ namespace Smartstore.BtcPay.Controllers
                 HttpContext.Session.SetString("ViewMsg", "");
             }
 
+            var sViewMsgError = HttpContext.Session.GetString("ViewMsgError");
+            if (!string.IsNullOrEmpty(sViewMsgError))
+            {
+                ViewBag.ViewMsgError = sViewMsgError;
+                HttpContext.Session.SetString("ViewMsgError", "");
+            }
+
             var sUrl = "";
             if (!string.IsNullOrEmpty(model.BtcPayUrl))
             {
@@ -77,6 +84,7 @@ namespace Smartstore.BtcPay.Controllers
         {
             if (!ModelState.IsValid)
             {
+                HttpContext.Session.SetString("ViewMsgError", "Incorrect data");
                 return Configure(settings);
             }
 
@@ -107,7 +115,7 @@ namespace Smartstore.BtcPay.Controllers
             }
             catch (Exception ex)
             {
-                HttpContext.Session.SetString("ViewMsg", "Error during API Key creation !");
+                HttpContext.Session.SetString("ViewMsgError", "Error during API Key creation !");
                 Logger.Error(ex.Message);
             }
             return RedirectToAction(nameof(Configure), settings);
@@ -132,7 +140,7 @@ namespace Smartstore.BtcPay.Controllers
                 }
                 catch (Exception ex)
                 {
-                    HttpContext.Session.SetString("ViewMsg", "Error during WebHook creation !");
+                    HttpContext.Session.SetString("ViewMsgError", "Error during WebHook creation! Make sure your API Key and Store ID are correct.");
                     Logger.Error(ex.Message);
               }
             }
