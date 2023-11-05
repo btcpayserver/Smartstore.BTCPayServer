@@ -20,16 +20,25 @@
             <LocaleResource Name="AdminInstruction">
                 <Value>
                     <![CDATA[
-<div class="mb-1">Veuillez saisir les données suivantes configurer ce plugin :</div>
-<ul><li>Pour créer la clé API BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">lisez ceci</a>.<br/>
-    <i>Note: Si vous voulez utilisez la fonction de Remboursement, vous devez aussi ajouter le droit "Modify your stores".<br/>
-    Après un remboursement, une note de commande est créée. Elle indique le lien BTCPay où le client pourra demander son remboursement.
-    </i>
+<div class="mb-1"><a href="https://github.com/Nisaba/btcpay-smartstore-plugin" target="_blank">Plugin BTCPay pour SmartStore</a></div>
+<div class="mb-1">La configuration du plugin peut se faire de manière automatique ou manuelle.</div>
+<div class="mb-1"><br/><b>Configuration automatique :</b></div>
+<ul>
+    <li>Renseignez le paramètre "BTCPay Url" et sauvegardez</li>
+    <li>Cliquez sur le lien "Créer la clé API automatiquement" pour être redirigé vers la page de création de la clé sur votre serveur BTCPay</li>
+    <li>Les paramètres "Clé API" et "BTCPay Store ID" sont alors automatiquement renseignés. Sauvegardez</li>
+    <li>Cliquez sur le lien "Créer le WebHook automatiquement"</li>
+    <li>Le champ "WebHook Secret" est alors automatiquement renseigné. Sauvegardez</li>
+</ul> 
+<div class="mb-1"><br/><b>Configuration manuelle :</b></div>
+<ul>
+    <li>Les champs "BTCPay Url", "Clé API", "BTCPay Store ID" et "WebHook Secret" doivent obligatoirement être renseignés.</li>
+    <li>Pour créer la clé API BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">lisez ceci</a>.<br/>
+        <i>Note: Si vous voulez utilisez la fonction de Remboursement, vous devez aussi ajouter le droit "Modify your stores".<br/>
+        Après un remboursement, une note de commande est créée. Elle indique le lien BTCPay où le client pourra demander son remboursement.
+        </i>
     </li>
     <li>Pour créer le Web hook BTCPay, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lisez ceci</a>. (utilisez le code secret par défaut généré par BTCPay) </li>
-    <li>Les champs "BTCPay Url", "Clé API", "BTCPay Store ID" et "WebHook Secret" doivent obligatoirement être renseignés.</li>
-    <li>Vous pouvez configurer automatiquement la clé API en cliquant sur le lien correspondant, mais il faut que le paramètre "BTCPay Url" soit d'abord renseigné et sauvegardé.</li>
-    <li>Vous pouvez aussi créer automatiquement le webhook, mais il faut que les paramètres "BTCPay Url","Api Key" et "BTCPay StoreID" soit d'abord renseignés et sauvegardés.</li>
 </ul> ]]>
                 </Value>
             </LocaleResource>

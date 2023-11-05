@@ -20,17 +20,27 @@
 			<LocaleResource Name="AdminInstruction">
 				<Value>
 					<![CDATA[
-<div class="mb-1">Geben Sie unten Ihre Daten ein, um dieses Plugin zu konfigurieren:</div>
-<ul><li>So erstellen Sie den BTCPay-API-Schlüssel, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">siehe hier</a>..<br/>
-    <i>Hinweis: Wenn Sie die Rückerstattungsfunktion nutzen möchten, müssen Sie auch das Recht „Modify your stores“ hinzufügen.</br>
-    Nach einer Rückerstattung wird eine Bestellnotiz erstellt. Es zeigt den BTCPay-Link an, über den der Kunde seine Rückerstattung beantragen kann.
-    </i>
+<div class="mb-1"><a href="https://github.com/Nisaba/btcpay-smartstore-plugin" target="_blank">BTCPay Plugin für SmartStore</a></div>
+<div class="mb-1">Die Konfiguration des Plugins kann automatisch oder manuell erfolgen.</div>
+<div class="mb-1"><br/><b>Automatische Konfiguration:</b></div>
+<ul>
+    <li>Geben Sie den "BTCPay Url"-Parameter ein und speichern Sie ihn.</li>
+    <li>Klicken Sie auf den Link "API-Key automatisch erstellen", um zur Seite zur Erstellung des Schlüssels auf Ihrem BTCPay-Server weitergeleitet zu werden.</li>
+    <li>Die Parameter "API-Key" und "BTCPay Store ID" werden automatisch ausgefüllt. Speichern Sie sie.</li>
+    <li>Klicken Sie auf den Link "WebHook automatisch erstellen".</li>
+    <li>Das Feld "WebHook Secret" wird automatisch ausgefüllt. Speichern Sie es.</li>
+</ul>
+<div class="mb-1"><br/><b>Manuelle Konfiguration:</b></div>
+<ul>
+    <li>Die Felder "BTCPay Url," "API-Key," "BTCPay Store ID" und "WebHook Secret" müssen unbedingt ausgefüllt werden.</li>
+    <li>Um den BTCPay API-Key zu erstellen, <a href="https://docs.btcpayserver.org/VirtueMart/#22-create-an-api-key-and-configure-permissions" target="_blank">lesen Sie dies</a>.<br/>
+        <i>Hinweis: Wenn Sie die Rückerstattungsfunktion verwenden möchten, müssen Sie auch die Berechtigung "Ihre Geschäfte bearbeiten" hinzufügen.<br/>
+        Nach einer Rückerstattung wird eine Bestellnotiz erstellt. Sie gibt den BTCPay-Link an, über den der Kunde seine Rückerstattung beantragen kann.
+        </i>
     </li>
-<li>So erstellen Sie den BTCPay-Web-Hook, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">siehe hier</a>. (Verwenden Sie das von BTCPay generierte Standardgeheimnis) </li>
-<li>Die Felder „BTCPay Url“, „API Key“, „BTCPay Store ID“ und „WebHook Secret“ müssen ausgefüllt werden.</li>
-<li>Sie können den API-Schlüssel automatisch konfigurieren, indem Sie auf den entsprechenden Link klicken, allerdings muss der Parameter „BTCPay Url“ eingegeben und gespeichert werden.</li>
-<li>Sie können den Webhook auch automatisch erstellen, allerdings müssen zunächst die Parameter „BTCPay Url“, „Api Key“ und „BTCPay StoreID“ eingegeben und gespeichert werden.</li>
-</ul> ]]>
+    <li>Um den BTCPay WebHook zu erstellen, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lesen Sie dies</a>. (verwenden Sie den standardmäßig von BTCPay generierten Geheimcode)</li>
+</ul>
+ ]]>
 				</Value>
 			</LocaleResource>
 
