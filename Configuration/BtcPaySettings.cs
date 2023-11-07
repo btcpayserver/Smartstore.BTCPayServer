@@ -1,6 +1,6 @@
 ﻿using Smartstore.Core.Configuration;
 
-namespace Smartstore.BtcPay.Settings
+namespace Smartstore.BTCPayServer.Configuration
 {
     /// <summary>
     /// Represents settings of BtcPay payment plugin

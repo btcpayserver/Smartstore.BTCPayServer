@@ -1,21 +1,21 @@
 ﻿<Language Name="Deutsch" IsDefault="false" IsRightToLeft="false">
-	<LocaleResource Name="Plugins.FriendlyName.SmartStore.BtcPay" AppendRootKey="false">
+	<LocaleResource Name="Plugins.FriendlyName.SmartStore.BTCPayServer" AppendRootKey="false">
 		<Value>Bezahlen Sie mit Bitcoin</Value>
 	</LocaleResource>
-	<LocaleResource Name="Plugins.Description.SmartStore.BtcPay" AppendRootKey="false">
+	<LocaleResource Name="Plugins.Description.SmartStore.BTCPayServer" AppendRootKey="false">
 		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BTCPay Server</Value>
 	</LocaleResource>
 
 	<!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-	<LocaleResource Name="Plugins.FriendlyName.Payments.BtcPay" AppendRootKey="false">
-		<Value>BTCPay</Value>
+	<LocaleResource Name="Plugins.FriendlyName.Payments.BTCPayServer" AppendRootKey="false">
+		<Value>BTCPay Server</Value>
 	</LocaleResource>
 	<!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-	<LocaleResource Name="Plugins.Description.Payments.BtcPay" AppendRootKey="false">
+	<LocaleResource Name="Plugins.Description.Payments.BTCPayServer" AppendRootKey="false">
 		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BtcPay Server.</Value>
 	</LocaleResource>
 
-	<LocaleResource Name="Plugins.SmartStore.BtcPay" AppendRootKey="false">
+	<LocaleResource Name="Plugins.SmartStore.BTCPayServer" AppendRootKey="false">
 			<Children>	
 			<LocaleResource Name="AdminInstruction">
 				<Value>

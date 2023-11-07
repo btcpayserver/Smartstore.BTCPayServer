@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <!-- <TargetFramework>net7.0</TargetFramework> -->
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+      <Product>Smartstore BTCPay Server</Product>
+      <OutputPath>..\..\Smartstore.Web\Modules\Smartstore.BTCPayServer</OutputPath>
+      <OutDir>$(OutputPath)</OutDir>
+      <Authors>Nisaba Solutions</Authors>
+      <Company>Nisaba Solutions</Company>
+      <PackageProjectUrl />
+      <Copyright>Copyright © Nisaba</Copyright>
+      <RootNamespace>Smartstore.BTCPayServer</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Public\PaymentInfo.cshtml" />
+    <None Remove="Views\BtcPayAdmin\Configure.cshtml" />
+    <None Remove="Views\_ViewImports.cshtml" />
+    <None Remove="wwwroot\admin.scss" />
+    <None Remove="wwwroot\brands\default.png" />
+    <None Remove="wwwroot\public.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BTCPayServer.Client" Version="1.7.3" />
+  </ItemGroup>
+
+    
+</Project>

@@ -1,14 +1,17 @@
 ﻿
-namespace Smartstore.BtcPay.Models
+using System.ComponentModel.DataAnnotations;
+using Smartstore.Web.Modelling;
+
+namespace Smartstore.BTCPayServer.Models
 {
-    [LocalizedDisplay("Plugins.Smartstore.BtcPay.")]
+    [ LocalizedDisplay("Plugins.SmartStore.BTCPayServer.")]
     public class ConfigurationModel : ModelBase
     {
 
         [LocalizedDisplay("*BtcPayUrl")]
         //[Url]
         [Required]
-        public string BtcPayUrl { get; set; }
+        public string? BtcPayUrl { get; set; }
 
         [LocalizedDisplay("*ApiKey")]
         public string? ApiKey { get; set; }
@@ -24,6 +27,15 @@ namespace Smartstore.BtcPay.Models
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFeePercentage")]
         public bool AdditionalFeePercentage { get; set; }
+
+        public bool IsConfigured()
+        {
+            return
+                !string.IsNullOrEmpty(ApiKey) &&
+                !string.IsNullOrEmpty(BtcPayStoreID) &&
+                !string.IsNullOrEmpty(BtcPayUrl) && 
+                !string.IsNullOrEmpty(WebHookSecret);
+        }
 
     }
 

@@ -1,4 +1,4 @@
-﻿namespace Smartstore.BTCPay.Models
+﻿namespace Smartstore.BTCPayServer.Models
 {
     public struct BtcPayPullPaymentModel
     {

@@ -1,4 +1,4 @@
-﻿namespace Smartstore.BtcPay.Models
+﻿namespace Smartstore.BTCPayServer.Models
 {
     public record BtcPayRefundModel
     {

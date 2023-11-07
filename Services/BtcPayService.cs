@@ -1,240 +1,230 @@
-﻿using System;
-using System.IO;
-using System.Linq.Expressions;
-using System.Net;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using Microsoft.CodeAnalysis;
-using Newtonsoft.Json;
-using NuGet.Protocol.Core.Types;
-using Smartstore.BtcPay.Models;
-using Smartstore.BtcPay.Settings;
-using Smartstore.BTCPay.Models;
+using BTCPayServer.Client;
+using BTCPayServer.Client.Models;
+using Newtonsoft.Json.Linq;
+using Smartstore.BTCPayServer.Configuration;
+using Smartstore.BTCPayServer.Models;
+using Smartstore.BTCPayServer.Providers;
+using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Checkout.Payment;
 
-namespace Smartstore.BtcPay.Services
+namespace Smartstore.BTCPayServer.Services
 {
+    
+    
     public class BtcPayService
     {
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public BtcPayService(IHttpClientFactory httpClientFactory )
+        {
+            _httpClientFactory = httpClientFactory;
+        }
+
+
+        public BTCPayServerClient GetClient(BtcPaySettings settings)
+        {
+            return  new BTCPayServerClient(new Uri(settings.BtcPayUrl), settings.ApiKey,_httpClientFactory.CreateClient("BTCPayServer"));
+        }
+        
+        public async Task<string> GetStoreId(BtcPaySettings settings)
+        {
+           return  (await  GetClient(settings).GetStores()).First().Id;
+        }
 
         public static bool CheckSecretKey(string key, string message, string signature)
         {
             var msgBytes = HMACSHA256.HashData(Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(message));
-            string hashString = string.Empty;
-            foreach (byte x in msgBytes)
-            {
-                hashString += String.Format("{0:x2}", x);
-            }
+            string hashString = msgBytes.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
             return (hashString == signature);
         }
 
-        public string CreateInvoice(BtcPaySettings settings, PaymentDataModel paymentData)
+        public async Task<InvoiceData> CreateInvoice(BtcPaySettings settings, PaymentDataModel paymentData)
         {
 
-            var sRep = string.Empty;
+            var client = GetClient(settings);
+            var req = new CreateInvoiceRequest()
+            {
+                Currency = paymentData.CurrencyCode,
+                Amount = paymentData.Amount,
+                Checkout = new InvoiceDataBase.CheckoutOptions()
+                {
+                    DefaultLanguage = paymentData.Lang,
+                    RedirectURL = paymentData.RedirectionURL,
+                    RedirectAutomatically = true,
+                    RequiresRefundEmail = false
+                },
+                Metadata = JObject.FromObject(new 
+                {
+                    buyerEmail = paymentData.BuyerEmail,
+                    buyerName = paymentData.BuyerName,
+                    orderId = paymentData.OrderID,
+                    orderUrl = paymentData.OrderUrl,
+                    itemDesc = paymentData.Description,
+                }),
+                Receipt = new InvoiceDataBase.ReceiptOptions()
+                {
+                    Enabled = true,
+                }
+            };
+            var invoice = await client.CreateInvoice(settings.BtcPayStoreID, req);
+            return invoice;
+        }
+
+        public async Task<string> CreateRefund(BtcPaySettings settings, RefundPaymentRequest refundRequest)
+        {
+
+            var client = GetClient(settings);
+            var invoice = await client.GetInvoicePaymentMethods(settings.BtcPayStoreID,
+                refundRequest.Order.AuthorizationTransactionId);
+            var pm = (invoice.FirstOrDefault(p => p.Payments.Any()) ?? invoice.First()).PaymentMethod;
+            var refundInvoiceRequest = new RefundInvoiceRequest()
+            {
+                Name = "Refund order " + refundRequest.Order.OrderGuid, PaymentMethod = pm,
+            };
+            if (refundRequest.IsPartialRefund)
+            {
+                refundInvoiceRequest.Description = "Partial refund";
+                refundInvoiceRequest.RefundVariant = RefundVariant.Custom;
+                refundInvoiceRequest.CustomAmount = refundRequest.AmountToRefund.Amount;
+                refundInvoiceRequest.CustomCurrency = refundRequest.Order.CustomerCurrencyCode;
+            }
+            else
+            {
+                refundInvoiceRequest.Description = "Full";
+                refundInvoiceRequest.PaymentMethod = "BTC";
+                refundInvoiceRequest.RefundVariant = RefundVariant.Fiat;
+            }
+
+
+            var refund = await client.RefundInvoice(settings.BtcPayStoreID,
+                refundRequest.Order.AuthorizationTransactionId, refundInvoiceRequest);
+
+            return refund.ViewLink;
+
+        }
+
+        public async Task<string> CreateWebHook(BtcPaySettings settings, string WebHookUrl)
+        {
+            var client = GetClient(settings);
+            var response = await client.CreateWebhook(settings.BtcPayStoreID, new CreateStoreWebhookRequest()
+            {
+                Url = WebHookUrl,
+                Enabled = true,
+                
+            });
+            return response.Secret;
+        }
+
+        public async Task<InvoiceData> GetInvoice(BtcPaySettings settings, string invoiceId)
+        {
+            
+            var client = GetClient(settings);
+            return await client.GetInvoice(settings.BtcPayStoreID, invoiceId);
+        }
+
+        public async Task<bool> UpdateOrderWithInvoice(BtcPaySettings settings ,Order order, string  invoiceId)
+        {
             try
             {
-                var invoice = new BtcPayInvoiceModel()
-                {
-                    currency = paymentData.CurrencyCode,
-                    amount = paymentData.Amount.ToString("#.##"),
-                    checkout = new BtcPayInvoiceCheckout()
-                    {
-                        defaultLanguage = paymentData.Lang,
-                        redirectURL = paymentData.RedirectionURL,
-                        redirectAutomatically = true,
-                        requiresRefundEmail = false
-                    },
-                    metadata = new BtcPayInvoiceMetaData()
-                    {
-                        buyerEmail = paymentData.BuyerEmail,
-                        buyerName = paymentData.BuyerName,
-                        orderId = paymentData.OrderID,
-                        itemDesc = paymentData.Description
-                    }
-                };
-                var invoiceJson = JsonConvert.SerializeObject(invoice, Formatting.None);
 
-                string sUrl = settings.BtcPayUrl.EndsWith("/") ? settings.BtcPayUrl : settings.BtcPayUrl + "/";
-                var client = new HttpClient()
-                {
-                    BaseAddress = new Uri($"{sUrl}api/v1/stores/{settings.BtcPayStoreID}/")
-                };
-                var webRequest = new HttpRequestMessage(HttpMethod.Post, "invoices")
-                {
-                    Content = new StringContent(invoiceJson, Encoding.UTF8, "application/json"),
-                };
-                webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
-
-                using (var rep = client.SendAsync(webRequest).Result)
-                {
-                    try
-                    {
-                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
-                        {
-                            sRep = rdr.ReadToEnd();
-                        }
-                    }
-                    catch { }
-                    rep.EnsureSuccessStatusCode();
-                }
-
-                dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-                return JsonRep.checkoutLink;
-
+                var invoice = await GetInvoice(settings, invoiceId);
+                return await UpdateOrderWithInvoice(order, invoice, null);
             }
-            catch (HttpRequestException ex)
+            catch (Exception e)
             {
-                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
-                dynamic JsonRep;
-                try { 
-                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-                    sMsg += $" - {JsonRep.message}";
-                } catch { }
-
-                throw new Exception (sMsg);
-            }
-            catch
-            {
-                throw;
+                order.PaymentStatus = PaymentStatus.Voided;
+                order.AddOrderNote(
+                    $"BTCPayServer: Error updating order status with invoice {invoiceId} - {e.Message}",
+                    false);
+                return true;
             }
         }
-
-        public string CreateRefund(BtcPaySettings settings, RefundPaymentRequest refundRequest)
+        
+        public async Task<bool> UpdateOrderWithInvoice(Order order, InvoiceData invoiceData,
+            WebhookInvoiceEvent? webhookEvent)
         {
-            var sRep = string.Empty;
-            try
+            if (order.PaymentMethodSystemName != BTCPayPaymentProvider.SystemName)
+                return false;
+
+            var newPaymentStatus = order.PaymentStatus;
+            var newOrderStatus = order.OrderStatus;
+
+            order.AuthorizationTransactionId = invoiceData.Id;
+            switch (invoiceData.Status)
             {
-                BtcPayRefundModel refund;
-                if (refundRequest.IsPartialRefund)
-                {
-                    refund = new BtcPayRefundCustomModel()
-                    {
-                        name = "Refund order " + refundRequest.Order.OrderGuid,
-                        description = "Partial",
-                        paymentMethod = "BTC",
-                        refundVariant = "Custom",
-                        customAmount = refundRequest.AmountToRefund.Amount,
-                        customCurrency = refundRequest.Order.CustomerCurrencyCode
-                    };
-                } else
-                {
-                    refund = new BtcPayRefundModel()
-                    {
-                        name = "Refund order " + refundRequest.Order.OrderGuid,
-                        description = "Full",
-                        paymentMethod = "BTC",
-                        refundVariant = "Fiat"
-                    };
-                };
+                case InvoiceStatus.New:
+                    newPaymentStatus = PaymentStatus.Pending;
+                    break;
+                case InvoiceStatus.Processing:
+                    newPaymentStatus =PaymentStatus.Pending; // PaymentStatus.Authorized; smartstore will set the order to processing otherwise
+                    newOrderStatus = OrderStatus.Pending;
+                    break;
+                case InvoiceStatus.Expired:
+                    newOrderStatus = OrderStatus.Cancelled;
+                    newPaymentStatus = PaymentStatus.Voided;
+                    break;
+                case InvoiceStatus.Invalid:
+                    newPaymentStatus = PaymentStatus.Voided;
+                    newOrderStatus = OrderStatus.Cancelled;
 
-                var refundJson = JsonConvert.SerializeObject(refund, Formatting.None);
-                var sBtcPayInvoiceID = refundRequest.Order.AuthorizationTransactionId;
-
-                string sUrl = settings.BtcPayUrl.EndsWith("/") ? settings.BtcPayUrl : settings.BtcPayUrl + "/";
-                var client = new HttpClient()
-                {
-                    BaseAddress = new Uri($"{sUrl}api/v1/stores/{settings.BtcPayStoreID}/invoices/{sBtcPayInvoiceID}/")
-                };
-                var webRequest = new HttpRequestMessage(HttpMethod.Post, "refund")
-                {
-                    Content = new StringContent(refundJson, Encoding.UTF8, "application/json"),
-                };
-                webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
-
-                using (var rep = client.SendAsync(webRequest).Result)
-                {
-                    try {
-                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
-                        {
-                            sRep = rdr.ReadToEnd();
-                        }
-                    } catch { }
-                    
-                    rep.EnsureSuccessStatusCode();
-                }
-
-                dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-
-                return JsonRep.viewLink;
-            }
-            catch (HttpRequestException ex)
-            {
-                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
-                dynamic JsonRep;
-                try
-                {
-                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-                    sMsg += $" - {JsonRep.message}";
-                }
-                catch { }
-
-                throw new Exception(sMsg);
-            }
-            catch
-            {
-                throw;
+                    break;
+                case InvoiceStatus.Settled:
+                    newPaymentStatus = PaymentStatus.Paid;
+                    newOrderStatus = OrderStatus.Processing;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
+            var updated = false;
+            if (newPaymentStatus != order.PaymentStatus)
+            {
+                order.PaymentStatus = newPaymentStatus;
+                updated = true;
+            }
+
+            if (newOrderStatus != order.OrderStatus && order.OrderStatus != OrderStatus.Complete)
+            {
+                order.OrderStatus = newOrderStatus;
+                updated = true;
+            }
+
+            if (updated)
+            {
+                var aditionalData = GetAdditionalMessageFromWebhook(webhookEvent)?.message;
+                aditionalData = string.IsNullOrEmpty(aditionalData) ? "" : $" - {aditionalData}";
+                order.AddOrderNote(
+                    $"BTCPayServer: Order status updated to {newOrderStatus} and payment status to {newPaymentStatus} by BTCPay with invoice {invoiceData.Id}{aditionalData}",
+                    false);
+                order.HasNewPaymentNotification = true;
+
+                if (order.PaymentStatus == PaymentStatus.Paid && !string.IsNullOrEmpty(order.CaptureTransactionResult))
+                    order.AddOrderNote(
+                        $"BTCPayServer: Payment received. <a href='{order.CaptureTransactionResult}'>Click here for more information.</a>", true);
+                return true;
+            }
+
+            return false;
         }
 
-        public string CreateWebHook(BtcPaySettings settings, string WebHookUrl)
+
+        private (string message, bool customerFriendly)? GetAdditionalMessageFromWebhook(WebhookInvoiceEvent? webhookEvent)
         {
-            var sRep = string.Empty;
-
-            try { 
-                BtcPayHookModel hook = new BtcPayHookModel()
+             switch (webhookEvent?.Type)
                 {
-                    url = WebHookUrl
-                };
-                var hookJson = JsonConvert.SerializeObject(hook, Formatting.None);
-
-                string sUrl = settings.BtcPayUrl.EndsWith("/") ? settings.BtcPayUrl : settings.BtcPayUrl + "/";
-                var client = new HttpClient()
-                {
-                    BaseAddress = new Uri($"{sUrl}api/v1/stores/{settings.BtcPayStoreID}/")
-                };
-                var webRequest = new HttpRequestMessage(HttpMethod.Post, "webhooks")
-                {
-                    Content = new StringContent(hookJson, Encoding.UTF8, "application/json"),
-                };
-                webRequest.Headers.Add("Authorization", $"token {settings.ApiKey}");
-
-                using (var rep = client.SendAsync(webRequest).Result)
-                {
-                    try
-                    {
-                        using (var rdr = new StreamReader(rep.Content.ReadAsStream()))
-                        {
-                            sRep = rdr.ReadToEnd();
-                        }
-                    }
-                    catch { }
-
-                    rep.EnsureSuccessStatusCode();
+                    case WebhookEventType.InvoiceReceivedPayment when  webhookEvent.ReadAs<WebhookInvoiceReceivedPaymentEvent>() is { } receivedPaymentEvent:
+                        return ($"Payment detected ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})"  ,  false);
+                    case WebhookEventType.InvoicePaymentSettled when  webhookEvent.ReadAs<WebhookInvoicePaymentSettledEvent>() is { } receivedPaymentEvent:
+                        return ($"Payment settled ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})"  ,  false);
+                    case WebhookEventType.InvoiceProcessing when  webhookEvent.ReadAs<WebhookInvoiceProcessingEvent>() is { } receivedPaymentEvent && receivedPaymentEvent.OverPaid:
+                        return ($"Invoice was overpaid."  ,  false);
+                    case WebhookEventType.InvoiceExpired when  webhookEvent.ReadAs<WebhookInvoiceExpiredEvent>() is { } receivedPaymentEvent && receivedPaymentEvent.PartiallyPaid:
+                        return ($"Invoice expired but was paid partially, please check."  ,  false);
+                    default: return null;
                 }
-
-                dynamic JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-
-                return JsonRep.secret;
-            }
-            catch (HttpRequestException ex)
-            {
-                var sMsg = $"HTTP Error {ex.StatusCode.Value}";
-                dynamic JsonRep;
-                try
-                {
-                    JsonRep = JsonConvert.DeserializeObject<dynamic>(sRep);
-                    sMsg += $" - {JsonRep.message}";
-                }
-                catch { }
-
-                throw new Exception(sMsg);
-            }
-            catch
-            {
-                    throw;
-            }
         }
+
     }
 }

@@ -1,8 +1,9 @@
-﻿@model ConfigurationModel
+﻿@using Smartstore.Core.Checkout.Payment
+@model ConfigurationModel
 @{
     Layout = "_ConfigureProvider";
 }
-
+@inject PaymentSettings PaymentSettings
 @await Component.InvokeAsync("StoreScope")
 
 <widget target-zone="admin_button_toolbar_before">
@@ -11,7 +12,24 @@
         <span>@T("Admin.Common.Save")</span>
     </button>
 </widget>
-
+@if (Model.IsConfigured())
+{
+    <widget target-zone="admin_button_toolbar_before">
+        <button id="DeleteConfigButton" name="command" type="submit" class="btn btn-danger" value="delete">
+            <i class="fa fa-trash"></i>
+            <span>@T("Admin.Common.Clear")</span>
+        </button>
+    </widget>
+}
+@if (Model.IsConfigured() && !PaymentSettings.ActivePaymentMethodSystemNames.Contains("Smartstore.BTCPayServer"))
+{
+    <widget target-zone="admin_button_toolbar_before">
+        <button id="ActivateMethodButton" name="command" type="submit" class="btn btn-primary" value="activate">
+       
+            <span>@T("Admin.Common.Activate")</span>
+        </button>
+    </widget>
+}
 @if (ViewBag.ViewMsg != null)
 {
     <div class="alert alert-success alert-dismissible">
@@ -27,21 +45,33 @@
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
 }
-
-<div class="plugin-configuration">
-    <div>
-        <div class="alert alert-info alert-dismissible">
-            @Html.Raw(T("Plugins.Smartstore.BtcPay.AdminInstruction"))
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+@if (!Model.IsConfigured())
+{
+    <div class="plugin-configuration">
+        <div>
+            <div class="alert alert-info alert-dismissible">
+                @Html.Raw(T("Plugins.SmartStore.BTCPayServer.AdminInstruction"))
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+                @if(string.IsNullOrEmpty(Model.WebHookSecret)){
+               
+                
+                <div class="alert alert-info alert-dismissible">
+                    @T("Plugins.SmartStore.BTCPayServer.WebHookInfo") &nbsp; @ViewBag.UrlWebHook<br />
+                    <i> @Html.Raw(T("Plugins.SmartStore.BTCPayServer.WebHookNote"))</i>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            }
+        </div>
+        <div>
+            <a href="https://btcpayserver.org" target="_blank">
+                <img src="@Url.Content("~/Modules/Smartstore.BTCPayServer/branding.png")" alt="BTCPayServer"/>
+            </a>
         </div>
     </div>
-    <div>
-        <a href="https://btcpayserver.org" target="_blank">
-            <img src="@Url.Content("~/Modules/Smartstore.BtcPay/branding.png")" alt="BTCPay" />
-        </a>
-    </div>
-</div>
+    
 
+}
 <form asp-action="Configure">
     <div asp-validation-summary="ModelOnly" />
         <div class="adminContent">
@@ -50,9 +80,13 @@
                     <smart-label asp-for="BtcPayUrl" />
             </div>
             <div class="adminData">
-                    <setting-editor asp-for="BtcPayUrl" />
-                    <span asp-validation-for="BtcPayUrl" />
+                <setting-editor asp-for="BtcPayUrl" />
+                <span asp-validation-for="BtcPayUrl" />
             </div>
+                @if (!Model.IsConfigured())
+                {
+                    <button type="submit" name="command" value="getautomaticapikeyconfig" class="btn btn-outline-primary btn-sm" style="margin-bottom: 0.25rem">Configure automatically</button>
+                }
         </div>
 
         <div class="adminRow">
@@ -63,8 +97,6 @@
                 <setting-editor asp-for="ApiKey" />
                 <span asp-validation-for="ApiKey"/>
             </div>
-            &nbsp;
-                    <a href="@ViewBag.UrlBtcApiKey">@T("Plugins.Smartstore.BtcPay.CreateApiKey")</a>
          </div>
 
 
@@ -80,28 +112,20 @@
 
     </div>
 
-    <br/>
-    <div class="alert alert-info alert-dismissible">
-        @T("Plugins.Smartstore.BtcPay.WebHookInfo") &nbsp; @ViewBag.UrlWebHook<br />
-        <i> @Html.Raw(T("Plugins.Smartstore.BtcPay.WebHookNote"))</i>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-
     <div class="adminContent">
      <div class="adminRow">
-            <div class="adminTitle">
-                <label>@T("Plugins.Smartstore.BtcPay.WebHookUrl")</label>
-            </div>
+         <div class="adminTitle">
+             
+             <div class="ctl-label"><label >@T("Plugins.SmartStore.BTCPayServer.WebHookUrl")</label></div>
+         </div>
             <div class="adminData">
                 <div class="input-group">
-                    <input value="@ViewBag.UrlWebHook" readonly />
+                    <input class="form-control" value="@ViewBag.UrlWebHook" readonly />
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" title="@T("Common.Copy")" onclick="navigator.clipboard.writeText('@ViewBag.UrlWebHook')">
                             <i class="fa fa-copy"></i>
                         </button>
                     </div>
-                    &nbsp;
-                    <a href="@ViewBag.UrlCreateWebHook">@T("Plugins.Smartstore.BtcPay.CreateWebhook")</a>
                 </div>
             </div>
         </div>

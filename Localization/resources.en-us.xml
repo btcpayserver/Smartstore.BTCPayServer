@@ -1,21 +1,21 @@
 ﻿<Language Name="English" IsDefault="true" IsRightToLeft="false">
-    <LocaleResource Name="Plugins.FriendlyName.SmartStore.BtcPay" AppendRootKey="false">
+    <LocaleResource Name="Plugins.FriendlyName.SmartStore.BTCPayServer" AppendRootKey="false">
         <Value>Pay with Bitcoin</Value>
     </LocaleResource>
-    <LocaleResource Name="Plugins.Description.SmartStore.BtcPay" AppendRootKey="false">
-        <Value>Accept Bitcoin in your SmartStore shop with BTCPay</Value>
+    <LocaleResource Name="Plugins.Description.SmartStore.BTCPayServer" AppendRootKey="false">
+        <Value>Accept Bitcoin in your SmartStore shop with BTCPay Server</Value>
     </LocaleResource>
 
     <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-    <LocaleResource Name="Plugins.FriendlyName.Payments.BtcPay" AppendRootKey="false">
-        <Value>BTCPay</Value>
+    <LocaleResource Name="Plugins.FriendlyName.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>BTCPay Server</Value>
     </LocaleResource>
     <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-    <LocaleResource Name="Plugins.Description.Payments.BtcPay" AppendRootKey="false">
-        <Value>Accept Bitcoin in your SmartStore shop with BtcPay</Value>
+    <LocaleResource Name="Plugins.Description.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>Accept Bitcoin in your SmartStore shop with BTCPay Server</Value>
     </LocaleResource>
 
-    <LocaleResource Name="Plugins.Smartstore.BtcPay" AppendRootKey="false">
+    <LocaleResource Name="Plugins.Smartstore.BTCPayServer" AppendRootKey="false">
         <Children>
             <LocaleResource Name="NoteRefund">
                 <Value>A refund has been made. Please follow this link: </Value>
@@ -63,8 +63,6 @@
     <li>Enter the "BTCPay Url" parameter and save.</li>
     <li>Click on the "Create API Key Automatically" link to be redirected to the key creation page on your BTCPay server.</li>
     <li>The "API Key" and "BTCPay Store ID" parameters will be automatically filled. Save.</li>
-    <li>Click on the "Create WebHook Automatically" link.</li>
-    <li>The "WebHook Secret" field will be automatically filled. Save.</li>
 </ul>
 <div class="mb-1"><br/><b>Manual Configuration:</b></div>
 <ul>

@@ -1,6 +1,6 @@
 # BTCPay Plugin for SmartStore
 
-![BTCPay Logo](https://github.com/Nisaba/btcpay-smartstore-plugin)
+![BTCPay Server](https://github.com/btcpayserver/btcpayserver/raw/master/BTCPayServer/wwwroot/img/btc_pay_BG_twitter.png)
 
 ## Plugin Overview
 
@@ -8,11 +8,9 @@ This plugin allows you to easily integrate Bitcoin payments into your SmartStore
 
 ## Automatic Configuration
 
-1. Enter the "BTCPay Url" parameter and save.
-2. Click on the "Create API Key Automatically" link to be redirected to the key creation page on your BTCPay server.
-3. The "API Key" and "BTCPay Store ID" parameters will be automatically filled. Save.
-4. Click on the "Create WebHook Automatically" link.
-5. The "WebHook Secret" field will be automatically filled. Save.
+1. Enter the "BTCPay Url" parameter and save.2. Click on the "Create API Key Automatically" link to be redirected to the key creation page on your BTCPay server.
+3. The "API Key" and "BTCPay Store ID" parameters will be automatically filled and a webhook will be automatically created. Save.
+
 
 ## Manual Configuration
 

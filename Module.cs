@@ -1,20 +1,16 @@
-﻿global using System;
-global using System.ComponentModel.DataAnnotations;
-global using System.Linq;
-global using System.Threading.Tasks;
-global using FluentValidation;
-global using Smartstore.Core.Localization;
-global using Smartstore.Web.Modelling;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using Smartstore.BTCPayServer.Configuration;
 using Smartstore.Engine.Modularity;
-using Smartstore.BtcPay.Settings;
+using Smartstore.Http;
 
-namespace Smartstore.BtcPay
+namespace Smartstore.BTCPayServer
 {
-    internal class Module : ModuleBase
+    internal class Module : ModuleBase, IConfigurable
     {
         public override async Task InstallAsync(ModuleInstallationContext context)
         {
-            await SaveSettingsAsync<BtcPaySettings>(new BtcPaySettings
+            await SaveSettingsAsync(new BtcPaySettings
             {
                 BtcPayUrl = "",
                 ApiKey = "",
@@ -30,9 +26,13 @@ namespace Smartstore.BtcPay
             await DeleteSettingsAsync<BtcPaySettings>();
 
             await DeleteLanguageResourcesAsync();
-            await DeleteLanguageResourcesAsync("Plugins.Payment.BtcPay");
+            await DeleteLanguageResourcesAsync("Plugins.Payment.BTCPayServer");
 
             await base.UninstallAsync();
         }
+
+
+        public RouteInfo GetConfigurationRoute()
+            => new("Configure", "BtcPayAdmin", new { area = "Admin" });
     }
 }

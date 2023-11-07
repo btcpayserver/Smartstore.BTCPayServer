@@ -1,21 +1,21 @@
 ﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
-    <LocaleResource Name="Plugins.FriendlyName.SmartStore.BtcPay" AppendRootKey="false">
+    <LocaleResource Name="Plugins.FriendlyName.SmartStore.BTCPayServer" AppendRootKey="false">
         <Value>Payez avec Bitcoin</Value>
     </LocaleResource>
-    <LocaleResource Name="Plugins.Description.SmartStore.BtcPay" AppendRootKey="false">
-        <Value>Acceptez Bitcoin dans boutique SmartStore avec BTCPay</Value>
+    <LocaleResource Name="Plugins.Description.SmartStore.BTCPayServer" AppendRootKey="false">
+        <Value>Acceptez Bitcoin dans boutique SmartStore avec BTCPay Server</Value>
     </LocaleResource>
 
     <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-    <LocaleResource Name="Plugins.FriendlyName.Payments.BtcPay" AppendRootKey="false">
-        <Value>BTCPay</Value>
+    <LocaleResource Name="Plugins.FriendlyName.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>BTCPay Server</Value>
     </LocaleResource>
     <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-    <LocaleResource Name="Plugins.Description.Payments.BtcPay" AppendRootKey="false">
-        <Value>Acceptez Bitcoin dans boutique SmartStore avec BtcPay</Value>
+    <LocaleResource Name="Plugins.Description.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>Acceptez Bitcoin dans boutique SmartStore avec BTCPay Server</Value>
     </LocaleResource>
 
-    <LocaleResource Name="Plugins.Smartstore.BtcPay" AppendRootKey="false">
+    <LocaleResource Name="Plugins.Smartstore.BTCPayServer" AppendRootKey="false">
         <Children>
             <LocaleResource Name="AdminInstruction">
                 <Value>
@@ -25,7 +25,7 @@
 <div class="mb-1"><br/><b>Configuration automatique :</b></div>
 <ul>
     <li>Renseignez le paramètre "BTCPay Url" et sauvegardez</li>
-    <li>Cliquez sur le lien "Créer la clé API automatiquement" pour être redirigé vers la page de création de la clé sur votre serveur BTCPay</li>
+    <li>Cliquez sur le lien "Créer la clé API automatiquement" pour être redirigé vers la page de création de la clé sur votre serveur BTCPay Server</li>
     <li>Les paramètres "Clé API" et "BTCPay Store ID" sont alors automatiquement renseignés. Sauvegardez</li>
     <li>Cliquez sur le lien "Créer le WebHook automatiquement"</li>
     <li>Le champ "WebHook Secret" est alors automatiquement renseigné. Sauvegardez</li>
@@ -65,13 +65,13 @@ Avec une vraie transaction, on peut donc s'attendre à un fonctionnement correct
                 <Value>BTCPay Url</Value>
             </LocaleResource>
             <LocaleResource Name="BtcPayUrl.Hint">
-                <Value>L'URL de votre instance BTCPay</Value>
+                <Value>L'URL de votre instance BTCPay Server</Value>
             </LocaleResource>
             <LocaleResource Name="ApiKey">
                 <Value>Clé API</Value>
             </LocaleResource>
             <LocaleResource Name="ApiKey.Hint">
-                <Value>La valeur de la clé API générée dans votre instance BTCPay</Value>
+                <Value>La valeur de la clé API générée dans votre instance BTCPay Server</Value>
             </LocaleResource>
             <LocaleResource Name="CreateApiKey">
                 <Value>Créer la clé API automatiquement</Value>
@@ -80,13 +80,13 @@ Avec une vraie transaction, on peut donc s'attendre à un fonctionnement correct
                 <Value>BTCPay Store ID</Value>
             </LocaleResource>
             <LocaleResource Name="BtcPayStoreID.Hint">
-                <Value>L'ID du magasin BTCPay</Value>
+                <Value>L'ID du magasin BTCPay Server</Value>
             </LocaleResource>
             <LocaleResource Name="WebHookSecret">
                 <Value>WebHook Secret</Value>
             </LocaleResource>
             <LocaleResource Name="WebHookSecret.Hint">
-                <Value>La valeur du WebHook Secret généré dans votre instance BTCPay</Value>
+                <Value>La valeur du WebHook Secret généré dans votre instance BTCPay Server</Value>
             </LocaleResource>
             <LocaleResource Name="WebHookUrl">
                 <Value>WebHook Url</Value>
