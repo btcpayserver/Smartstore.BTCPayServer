@@ -238,7 +238,7 @@ namespace Smartstore.BTCPayServer.Providers
                 var settings = _settingFactory.LoadSettings<BtcPaySettings>(myStore.Id);
               
                 var sUrl = await _btcPayService.CreateRefund(settings, refundPaymentRequest);
-                refundPaymentRequest.Order.AddOrderNote(_localizationService.GetResource("Plugins.SmartStore.BTCPayServer.NoteRefund") + sUrl, true);
+                refundPaymentRequest.Order.AddOrderNote($"<a href='{sUrl}'>{_localizationService.GetResource("Plugins.SmartStore.BTCPayServer.NoteRefund")}</a>", true);
                 result.NewPaymentStatus = refundPaymentRequest.IsPartialRefund ? PaymentStatus.PartiallyRefunded : PaymentStatus.Refunded;
             }
             catch (Exception ex)

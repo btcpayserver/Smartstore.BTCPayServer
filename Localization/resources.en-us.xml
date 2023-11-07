@@ -18,7 +18,7 @@
     <LocaleResource Name="Plugins.Smartstore.BTCPayServer" AppendRootKey="false">
         <Children>
             <LocaleResource Name="NoteRefund">
-                <Value>A refund has been made. Please follow this link: </Value>
+                <Value>A refund has been initiated. Click here to proceed.</Value>
             </LocaleResource>
             <LocaleResource Name="BtcPayUrl">
                 <Value>BTCPay Url</Value>
