@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Get the directory of the currently running script
-StartPath=$(dirname "$0")
+# Get the absolute directory path of the currently running script
+StartPath=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 # Print the StartPath
 echo "$StartPath"
