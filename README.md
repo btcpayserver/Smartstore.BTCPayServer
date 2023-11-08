@@ -1,3 +1,16 @@
+NOTE: THis fork of Smartstore hosts the plugin source code for the BTCPay Server integration. You can view its README at [src/Smartstore.Plugins.Payment.BTCPayServer/README.md](src/Smartstore.Plugins.Payment.BTCPayServer/README.md).
+
+## Building the plugin
+Running `build-btcpayplugin.ps1` or `build-btcpayplugin.sh` will build the plugin and place the resulting zip file in `build/packaghes`.
+
+## Releasing the plugin
+A github actions workflow is configured to automatically build and release the plugin when a new tag is pushed to the repository. 
+The workflow will build the plugin and upload it to the [releases page](https://github.com/btcpayserver/Smartstore.BTCPayServer/releases/)
+The tag name must be in the format `BTCPayServer/{version}`, where `{version}` is the version of the plugin as defined in `src\Smartstore.Modules\Smartstore.BTCPayServer\module.json`.
+
+## Testing without debugging
+Simply run `docker compose up` in this directory and the latest version of SmartStore will be run on `localhost`. Just use the SQLite db option and you're good to go. 
+
 <p align="center">
 	<a href="https://www.smartstore.com" target="_blank" rel="noopener noreferrer">
 		<img src="assets/smartstore-icon-whitebg.png" alt="Smartstore" width="120">
