@@ -1,0 +1,54 @@
+﻿name: Create Release
+
+on:
+  create:
+    tags:
+      - 'BTCPayServer/*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET 7
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x' # Use .NET 7
+
+      - name: Run build script and capture output
+        run: |
+          chmod +x $GITHUB_WORKSPACE/build-btcpayplugin.sh
+          ASSET_PATH=$($GITHUB_WORKSPACE/build-btcpayplugin.sh | tail -1)
+          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+
+      - name: Verify tag matches asset file name
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/BTCPayServer/}
+          ASSET_BASE_NAME=$(basename $ASSET_PATH .zip)
+          if [[ "$ASSET_BASE_NAME" != *"$TAG_NAME" ]]; then
+            echo "Error: Tag name does not match asset file name."
+            exit 1
+          fi
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.ASSET_PATH }}
+          asset_name: $(basename ${{ env.ASSET_PATH }})
+          asset_content_type: application/zip

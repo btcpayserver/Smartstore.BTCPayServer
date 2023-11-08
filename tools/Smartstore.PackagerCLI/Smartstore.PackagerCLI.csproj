@@ -15,6 +15,9 @@
       <Content Include="..\..\build-btcpayplugin.ps1">
         <Link>build-btcpayplugin.ps1</Link>
       </Content>
+      <Content Include="..\..\build-btcpayplugin.sh">
+        <Link>build-btcpayplugin.sh</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
