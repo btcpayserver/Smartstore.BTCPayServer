@@ -43,6 +43,9 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Extract file name
+        run: echo "ASSET_NAME=$(basename ${{ env.ASSET_PATH }})" >> $GITHUB_ENV
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
@@ -50,5 +53,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.ASSET_PATH }}
-          asset_name: $(basename ${{ env.ASSET_PATH }})
+          asset_name: ${{ env.ASSET_NAME }}
           asset_content_type: application/zip
+
