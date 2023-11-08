@@ -68,6 +68,7 @@ namespace Smartstore.BTCPayServer.Services
                     Enabled = true,
                 }
             };
+            
             var invoice = await client.CreateInvoice(settings.BtcPayStoreID, req);
             return invoice;
         }
@@ -105,13 +106,29 @@ namespace Smartstore.BTCPayServer.Services
 
         }
 
-        public async Task<string> CreateWebHook(BtcPaySettings settings, string WebHookUrl)
+        public async Task<string> CreateWebHook(BtcPaySettings settings, string webHookUrl)
         {
             var client = GetClient(settings);
+            var existing = await client.GetWebhooks(settings.BtcPayStoreID);
+            var existingWebHook = existing.Where(x => x.Url == webHookUrl);
+            foreach (var webhookData in existingWebHook)
+            {
+                await client.DeleteWebhook(settings.BtcPayStoreID, webhookData.Id);
+            }
+
             var response = await client.CreateWebhook(settings.BtcPayStoreID, new CreateStoreWebhookRequest()
             {
-                Url = WebHookUrl,
+                Url = webHookUrl,
                 Enabled = true,
+                AuthorizedEvents = new StoreWebhookBaseData.AuthorizedEventsData()
+                {
+                    SpecificEvents = new[]
+                    {
+                        WebhookEventType.InvoiceReceivedPayment, WebhookEventType.InvoiceProcessing,
+                        WebhookEventType.InvoiceExpired, WebhookEventType.InvoiceSettled,
+                        WebhookEventType.InvoiceInvalid, WebhookEventType.InvoicePaymentSettled,
+                    }
+                }
                 
             });
             return response.Secret;

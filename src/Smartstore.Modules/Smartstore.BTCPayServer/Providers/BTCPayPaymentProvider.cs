@@ -132,31 +132,35 @@ namespace Smartstore.BTCPayServer.Providers
                 Customer? myCustomer = await _customerService.GetAuthenticatedCustomerAsync();
                 if (myCustomer == null)
                 {
-                    myCustomer = await _db.Customers.FirstOrDefaultAsync(x => x.Id == processPaymentRequest.CustomerId) 
-                                        ?? throw new Exception("Customer not found");
+                    myCustomer = await _db.Customers.Include(customer => customer.BillingAddress)
+                                     .FirstOrDefaultAsync(x => x.Id == processPaymentRequest.CustomerId)
+                                 ?? throw new Exception("Customer not found");
                     sEmail = myCustomer.BillingAddress?.Email;
-                    sFullName = myCustomer.BillingAddress?.GetFullName(); 
-                } else
+                    sFullName = myCustomer.BillingAddress?.GetFullName();
+                }
+                else
                 {
                     sEmail = myCustomer.Email;
                     sFullName = myCustomer.FullName;
                 }
-                
-                var invoice =  await _btcPayService.CreateInvoice(settings, new PaymentDataModel()
-                                    {
-                                        CurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode,
-                                        Amount = processPaymentRequest.OrderTotal,
-                                        BuyerEmail = sEmail,
-                                        BuyerName = sFullName,
-                                        OrderID = processPaymentRequest.OrderGuid.ToString(),
-                                        StoreID = myStore.Id,
-                                        CustomerID = myCustomer.Id,
-                                        Description = "From " + myStore.Name,
-                                        RedirectionURL = myStore.Url + "checkout/completed",
-                                        Lang = _services.WorkContext.WorkingLanguage.LanguageCulture,
-                                        OrderUrl = new Uri(new Uri(myStore.Url), _linkGenerator.GetPathByAction("Details", "Order", new {orderId = processPaymentRequest.OrderGuid.ToString()})).ToString()
-                                        
-                                    }) ;
+
+                var invoice = await _btcPayService.CreateInvoice(settings,
+                    new PaymentDataModel()
+                    {
+                        CurrencyCode = _currencyService.PrimaryCurrency.CurrencyCode,
+                        Amount = processPaymentRequest.OrderTotal,
+                        BuyerEmail = sEmail,
+                        BuyerName = sFullName,
+                        OrderID = processPaymentRequest.OrderGuid.ToString(),
+                        StoreID = myStore.Id,
+                        CustomerID = myCustomer.Id,
+                        Description = "From " + myStore.Name,
+                        RedirectionURL = myStore.Url + "checkout/completed",
+                        Lang = _services.WorkContext.WorkingLanguage.LanguageCulture,
+                        OrderUrl = new Uri(new Uri(myStore.Url),
+                            _linkGenerator.GetPathByAction("Index", "BtcpayOrder",
+                                new {id = processPaymentRequest.OrderGuid})).ToString()
+                    });
                 
                 result.AuthorizationTransactionResult = invoice.CheckoutLink;
                 result.AuthorizationTransactionId = invoice.Id;

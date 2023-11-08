@@ -139,27 +139,30 @@
             <span asp-validation-for="WebHookSecret" />
         </div>
     </div>
-    <span></span>
-    <br/>
-
-    <div class="adminRow">
-        <div class="adminTitle">
-            <smart-label asp-for="AdditionalFee" />
+        <hr/>
+        <div class="card border-0" id="additionalOptions">
+            <h6 class="card-title" >Additional Options</h6>
+            
+                <div class="adminRow">
+                    <div class="adminTitle">
+                        <smart-label asp-for="AdditionalFee"/>
+                    </div>
+                    <div class="adminData">
+                        <editor asp-for="AdditionalFee" sm-postfix="@ViewBag.StoreCurrencyCode"/>
+                        <span asp-validation-for="AdditionalFee"></span>
+                    </div>
+                </div>
+                <div class="adminRow">
+                    <div class="adminTitle">
+                        <smart-label asp-for="AdditionalFeePercentage"/>
+                    </div>
+                    <div class="adminData">
+                        <editor asp-for="AdditionalFeePercentage"/>
+                        <span asp-validation-for="AdditionalFeePercentage"></span>
+                    </div>
+                </div>
         </div>
-        <div class="adminData">
-            <editor asp-for="AdditionalFee" sm-postfix="@ViewBag.StoreCurrencyCode" />
-            <span asp-validation-for="AdditionalFee"></span>
-        </div>
-    </div>
-    <div class="adminRow">
-        <div class="adminTitle">
-            <smart-label asp-for="AdditionalFeePercentage" />
-        </div>
-        <div class="adminData">
-            <editor asp-for="AdditionalFeePercentage" />
-            <span asp-validation-for="AdditionalFeePercentage"></span>
-        </div>
-    </div>
+   
 
 </div>
 

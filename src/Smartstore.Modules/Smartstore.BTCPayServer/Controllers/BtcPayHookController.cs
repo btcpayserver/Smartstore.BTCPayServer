@@ -1,5 +1,5 @@
-﻿using BTCPayServer.Client;
-using BTCPayServer.Client.Models;
+﻿using BTCPayServer.Client.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +8,14 @@ using Newtonsoft.Json;
 using Smartstore.BTCPayServer.Configuration;
 using Smartstore.BTCPayServer.Providers;
 using Smartstore.BTCPayServer.Services;
-using Smartstore.Core;
-using Smartstore.Core.Checkout.Orders;
-using Smartstore.Core.Checkout.Payment;
 using Smartstore.Core.Data;
 using Smartstore.Web.Controllers;
 
 namespace Smartstore.BTCPayServer.Controllers
 {
+    
     public class BtcPayHookController : PublicController
     {
-        private readonly ILogger _logger;
         private readonly BtcPayService _btcPayService;
         private readonly SmartDbContext _db;
         private readonly BtcPaySettings _settings;
@@ -26,10 +23,8 @@ namespace Smartstore.BTCPayServer.Controllers
         public BtcPayHookController(
             BtcPaySettings settings,
             SmartDbContext db,
-            ILogger logger,
             BtcPayService btcPayService)
         {
-            _logger = logger;
             _btcPayService = btcPayService;
             _db = db;
             _settings = settings;
@@ -37,7 +32,7 @@ namespace Smartstore.BTCPayServer.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost][AllowAnonymous]
         public async Task<IActionResult> Process([FromHeader(Name = "BTCPAY-SIG")] string btcPaySig)
         {
             try
@@ -45,7 +40,7 @@ namespace Smartstore.BTCPayServer.Controllers
                 string jsonStr = await new StreamReader(Request.Body).ReadToEndAsync();
                 var webhookEvent = JsonConvert.DeserializeObject<WebhookInvoiceEvent>(jsonStr);
                 var signature = btcPaySig.Split('=')[1];
-                if(webhookEvent?.InvoiceId?.StartsWith("__test__") is true)
+                if(webhookEvent is null ||  webhookEvent?.InvoiceId?.StartsWith("__test__") is true || webhookEvent?.Type == WebhookEventType.InvoiceCreated)
                 {
                    return Ok();
                 }
