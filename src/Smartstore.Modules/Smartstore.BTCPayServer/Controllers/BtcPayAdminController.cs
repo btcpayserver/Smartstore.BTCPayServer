@@ -18,7 +18,7 @@ using Smartstore.Core.Checkout.Payment;
 namespace Smartstore.BTCPayServer.Controllers
 {
     [Area("Admin")]
-    [Route("[area]/btcpay/{action=index}/{id?}")]
+    [Route("[area]/btcpayserver/{action=index}/{id?}")]
     public class BtcPayAdminController : ModuleController
     {
 
@@ -74,10 +74,10 @@ namespace Smartstore.BTCPayServer.Controllers
                 
                 sUrl = model.BtcPayUrl + (model.BtcPayUrl.EndsWith("/") ? "" : "/");
                 sUrl += $"api-keys/authorize?applicationName={myStore.Name.Replace(" ", "")}&applicationIdentifier=SmartStore{myStore.Id}&selectiveStores=true"
-                     + $"&redirect={myStore.Url}admin/btcpay/getautomaticapikeyconfig&permissions=btcpay.store.canmodifystoresettings";
+                     + $"&redirect={myStore.Url}admin/btcpayserver/getautomaticapikeyconfig&permissions=btcpay.store.canmodifystoresettings";
             }
             ViewBag.UrlBtcApiKey = sUrl;
-            ViewBag.UrlCreateWebHook = myStore.Url + "admin/btcpay/createwebhook/";
+            ViewBag.UrlCreateWebHook = myStore.Url + "admin/btcpayserver/createwebhook/";
             return View(model);
         }
 
@@ -90,7 +90,7 @@ namespace Smartstore.BTCPayServer.Controllers
             }
 
             var myStore = _services.StoreContext.CurrentStore;
-            var adminUrl = myStore.Url + "admin/btcpay/getautomaticapikeyconfig";
+            var adminUrl = myStore.Url + "admin/btcpayserver/getautomaticapikeyconfig";
             var adminUrlParams = new Dictionary<string, string>();
             adminUrlParams.Add("ssid", myStore.Id.ToString());
             adminUrlParams.Add("btcpayuri", btcpayUri.ToString());

@@ -1,34 +1,32 @@
 ﻿<Language Name="Deutsch" IsDefault="false" IsRightToLeft="false">
-	<LocaleResource Name="Plugins.FriendlyName.SmartStore.BTCPayServer" AppendRootKey="false">
-		<Value>Bezahlen Sie mit Bitcoin</Value>
-	</LocaleResource>
-	<LocaleResource Name="Plugins.Description.SmartStore.BTCPayServer" AppendRootKey="false">
-		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BTCPay Server</Value>
-	</LocaleResource>
+    <LocaleResource Name="Plugins.FriendlyName.SmartStore.BTCPayServer" AppendRootKey="false">
+        <Value>Bezahlen Sie mit Bitcoin</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.SmartStore.BTCPayServer" AppendRootKey="false">
+        <Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BTCPay Server</Value>
+    </LocaleResource>
 
-	<!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-	<LocaleResource Name="Plugins.FriendlyName.Payments.BTCPayServer" AppendRootKey="false">
-		<Value>BTCPay Server</Value>
-	</LocaleResource>
-	<!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
-	<LocaleResource Name="Plugins.Description.Payments.BTCPayServer" AppendRootKey="false">
-		<Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BtcPay Server.</Value>
-	</LocaleResource>
+    <!-- (Provider name) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+    <LocaleResource Name="Plugins.FriendlyName.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>BTCPay Server</Value>
+    </LocaleResource>
+    <!-- (Provider description) will be displayed in frontend on payment selection page and in backend on payment configuration list -->
+    <LocaleResource Name="Plugins.Description.Payments.BTCPayServer" AppendRootKey="false">
+        <Value>Akzeptieren Sie Bitcoin in Ihrem SmartStore-Shop mit BtcPay Server.</Value>
+    </LocaleResource>
 
-	<LocaleResource Name="Plugins.SmartStore.BTCPayServer" AppendRootKey="false">
-			<Children>	
-			<LocaleResource Name="AdminInstruction">
-				<Value>
-					<![CDATA[
+    <LocaleResource Name="Plugins.SmartStore.BTCPayServer" AppendRootKey="false">
+        <Children>
+            <LocaleResource Name="AdminInstruction">
+                <Value>
+                    <![CDATA[
 <div class="mb-1"><a href="https://github.com/Nisaba/btcpay-smartstore-plugin" target="_blank">BTCPay Plugin für SmartStore</a></div>
 <div class="mb-1">Die Konfiguration des Plugins kann automatisch oder manuell erfolgen.</div>
 <div class="mb-1"><br/><b>Automatische Konfiguration:</b></div>
 <ul>
-    <li>Geben Sie den "BTCPay Url"-Parameter ein und speichern Sie ihn.</li>
-    <li>Klicken Sie auf den Link "API-Key automatisch erstellen", um zur Seite zur Erstellung des Schlüssels auf Ihrem BTCPay-Server weitergeleitet zu werden.</li>
-    <li>Die Parameter "API-Key" und "BTCPay Store ID" werden automatisch ausgefüllt. Speichern Sie sie.</li>
-    <li>Klicken Sie auf den Link "WebHook automatisch erstellen".</li>
-    <li>Das Feld "WebHook Secret" wird automatisch ausgefüllt. Speichern Sie es.</li>
+    <li>Geben Sie den "BTCPay Url"-Parameter ein und speichern .</li>
+    <li>Klicken Sie auf "Configure automatically", um zur Seite zur Erstellung des Schlüssels auf Ihrem BTCPay-Server weitergeleitet zu werden.</li>
+    <li>Die Parameter "API-Key", "BTCPay Store ID" und "WebHook Secret" werden automatisch ausgefüllt. Speichern Sie sie.</li>
 </ul>
 <div class="mb-1"><br/><b>Manuelle Konfiguration:</b></div>
 <ul>
@@ -41,53 +39,53 @@
     <li>Um den BTCPay WebHook zu erstellen, <a href="https://docs.btcpayserver.org/VirtueMart/#23-create-a-webhook-on-btcpay-server" target="_blank">lesen Sie dies</a>. (verwenden Sie den standardmäßig von BTCPay generierten Geheimcode)</li>
 </ul>
  ]]>
-				</Value>
-			</LocaleResource>
+                </Value>
+            </LocaleResource>
 
 
-                <LocaleResource Name="WebHookNote">
-                    <Value>
-                        <![CDATA[
+            <LocaleResource Name="WebHookNote">
+                <Value>
+                    <![CDATA[
 Hinweis: Beim Testen des Webhooks von BTCPay sollte ein HTTP 422-Fehler angezeigt werden.<br/>
 Dies liegt daran, dass BTCPay leere Daten sendet, während das SmartStore-Plugin echte Daten erwartet.<br/>
 Dieser Fehler weist daher darauf hin, dass der Webhook tatsächlich über BTCPay zugänglich ist.<br/>
 Bei einer echten Transaktion können wir daher von einer korrekten Abwicklung ausgehen.
              ]]>
-                    </Value>
-                </LocaleResource>
+                </Value>
+            </LocaleResource>
 
 
-                <LocaleResource Name="WebHookInfo">
+            <LocaleResource Name="WebHookInfo">
                 <Value>Hier ist die URL, die für die WebHook-Erstellung in BTCPay festgelegt werden muss: </Value>
             </LocaleResource>
-                
+
             <LocaleResource Name="BtcPayUrl">
-				<Value>BTCPay-URL</Value>
-			</LocaleResource>
-			<LocaleResource Name="BtcPayUrl.Hint">
-				<Value>Die URL Ihrer BTCPay-Instanz</Value>
-			</LocaleResource>
-			<LocaleResource Name="ApiKey">
-				<Value>API-Schlüssel</Value>
-			</LocaleResource>
-			<LocaleResource Name="ApiKey.Hint">
-				<Value>Der in Ihrer BTCPay-Instanz generierte API-Schlüsselwert</Value>
-			</LocaleResource>
+                <Value>BTCPay-URL</Value>
+            </LocaleResource>
+            <LocaleResource Name="BtcPayUrl.Hint">
+                <Value>Die URL Ihrer BTCPay-Instanz</Value>
+            </LocaleResource>
+            <LocaleResource Name="ApiKey">
+                <Value>API-Schlüssel</Value>
+            </LocaleResource>
+            <LocaleResource Name="ApiKey.Hint">
+                <Value>Der in Ihrer BTCPay-Instanz generierte API-Schlüsselwert</Value>
+            </LocaleResource>
             <LocaleResource Name="CreateApiKey">
                 <Value>API-Schlüssel automatisch erstellen</Value>
             </LocaleResource>
             <LocaleResource Name="BtcPayStoreID">
-			    <Value>BTCPay Store-ID</Value>
-			</LocaleResource>
-			<LocaleResource Name="BtcPayStoreID.Hint">
-				<Value>die BTCPay Store ID</Value>
-			</LocaleResource>
-			<LocaleResource Name="WebHookSecret">
-				<Value>WebHook-Geheimnis</Value>
-			</LocaleResource>
-			<LocaleResource Name="WebHookSecret.Hint">
-				<Value>Der in Ihrer BTCPay-Instanz generierte WebHook-Secret-Wert</Value>
-			</LocaleResource>
+                <Value>BTCPay Store-ID</Value>
+            </LocaleResource>
+            <LocaleResource Name="BtcPayStoreID.Hint">
+                <Value>die BTCPay Store ID</Value>
+            </LocaleResource>
+            <LocaleResource Name="WebHookSecret">
+                <Value>WebHook-Geheimnis</Value>
+            </LocaleResource>
+            <LocaleResource Name="WebHookSecret.Hint">
+                <Value>Der in Ihrer BTCPay-Instanz generierte WebHook-Secret-Wert</Value>
+            </LocaleResource>
             <LocaleResource Name="CreateWebhook">
                 <Value>Webhook automatisch erstellen</Value>
             </LocaleResource>
@@ -95,17 +93,17 @@ Bei einer echten Transaktion können wir daher von einer korrekten Abwicklung au
                 <Value>WebHook-Url</Value>
             </LocaleResource>
             <LocaleResource Name="NoteRefund">
-				<Value>Es wurde eine Rückerstattung vorgenommen. Bitte folgen Sie diesem Link:</Value>
-			</LocaleResource>
+                <Value>Es wurde eine Rückerstattung vorgenommen. Bitte folgen Sie diesem Link:</Value>
+            </LocaleResource>
 
-			<LocaleResource Name="PaymentInfo">
-				<Value>Nach Abschluss Ihrer Bestellung werden Sie an unseren BTCPay Server weitergeleitet, wo Sie die Zahlung für Ihre Bestellung tätigen können..</Value>
-			</LocaleResource>
+            <LocaleResource Name="PaymentInfo">
+                <Value>Nach Abschluss Ihrer Bestellung werden Sie an unseren BTCPay Server weitergeleitet, wo Sie die Zahlung für Ihre Bestellung tätigen können..</Value>
+            </LocaleResource>
 
             <LocaleResource Name="PaymentError">
                 <Value>Fehler bei der Verarbeitung der Zahlung. Bitte versuchen Sie es erneut und kontaktieren Sie uns, wenn das Problem weiterhin besteht.</Value>
             </LocaleResource>
 
-            </Children>
-	</LocaleResource>
+        </Children>
+    </LocaleResource>
 </Language>

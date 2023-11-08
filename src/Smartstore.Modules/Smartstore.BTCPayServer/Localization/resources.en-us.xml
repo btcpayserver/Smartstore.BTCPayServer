@@ -60,9 +60,9 @@
 <div class="mb-1">The plugin configuration can be done automatically or manually.</div>
 <div class="mb-1"><br/><b>Automatic Configuration:</b></div>
 <ul>
-    <li>Enter the "BTCPay Url" parameter and save.</li>
-    <li>Click on the "Create API Key Automatically" link to be redirected to the key creation page on your BTCPay server.</li>
-    <li>The "API Key" and "BTCPay Store ID" parameters will be automatically filled. Save.</li>
+    <li>Enter the "BTCPay Url" parameter.</li>
+    <li>Click on the "Configure automatically" button to be redirected to the key creation page on your BTCPay server.</li>
+    <li>The "API Key", "BTCPay Store ID" and "WebHook Secret" parameters will be automatically filled. Save.</li>
 </ul>
 <div class="mb-1"><br/><b>Manual Configuration:</b></div>
 <ul>
@@ -96,7 +96,7 @@ With a real transaction, you can therefore expect correct operation.
             <LocaleResource Name="PaymentInfo">
                 <Value>After completing the order you will be redirected to the merchant BTCPay instance, where you can make the Bitcoin payment for your order.</Value>
             </LocaleResource>
-            
+
             <LocaleResource Name="PaymentError">
                 <Value>Error processing the payment. Please try again and contact us if the problem persists.</Value>
             </LocaleResource>

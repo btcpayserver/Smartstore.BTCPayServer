@@ -24,11 +24,9 @@
 <div class="mb-1">La configuration du plugin peut se faire de manière automatique ou manuelle.</div>
 <div class="mb-1"><br/><b>Configuration automatique :</b></div>
 <ul>
-    <li>Renseignez le paramètre "BTCPay Url" et sauvegardez</li>
-    <li>Cliquez sur le lien "Créer la clé API automatiquement" pour être redirigé vers la page de création de la clé sur votre serveur BTCPay Server</li>
-    <li>Les paramètres "Clé API" et "BTCPay Store ID" sont alors automatiquement renseignés. Sauvegardez</li>
-    <li>Cliquez sur le lien "Créer le WebHook automatiquement"</li>
-    <li>Le champ "WebHook Secret" est alors automatiquement renseigné. Sauvegardez</li>
+    <li>Renseignez le paramètre "BTCPay Url"</li>
+    <li>Cliquez sur le bouton "Configure automatically" pour être redirigé vers la page de création de la clé sur votre serveur BTCPay Server</li>
+    <li>Les paramètres "Clé API", "BTCPay Store ID" et "WebHook Secret" sont alors automatiquement renseignés. Sauvegardez</li>
 </ul> 
 <div class="mb-1"><br/><b>Configuration manuelle :</b></div>
 <ul>
@@ -55,7 +53,7 @@ C'est parce que BTCPay envoie des données vides alors que le plugin SmartStore 
 Cette erreur indique donc que le webhook est bien accessible depuis BTCPay.<br/>
 Avec une vraie transaction, on peut donc s'attendre à un fonctionnement correct.
              ]]>
-            </Value>
+                </Value>
             </LocaleResource>
 
             <LocaleResource Name="NoteRefund">
