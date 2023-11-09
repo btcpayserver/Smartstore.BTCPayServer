@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Smartstore.BTCPayServer.Configuration;
 using Smartstore.BTCPayServer.Providers;
 using Smartstore.BTCPayServer.Services;
+using Smartstore.Core;
 using Smartstore.Core.Data;
 using Smartstore.Web.Controllers;
 
@@ -18,16 +19,16 @@ namespace Smartstore.BTCPayServer.Controllers
     {
         private readonly BtcPayService _btcPayService;
         private readonly SmartDbContext _db;
-        private readonly BtcPaySettings _settings;
+        private readonly ICommonServices _services;
 
         public BtcPayHookController(
-            BtcPaySettings settings,
             SmartDbContext db,
+            ICommonServices services,
             BtcPayService btcPayService)
         {
             _btcPayService = btcPayService;
             _db = db;
-            _settings = settings;
+            _services = services;
         }
 
 
@@ -50,26 +51,24 @@ namespace Smartstore.BTCPayServer.Controllers
                     Logger.Error("Missing fields in request");
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
-                if (_settings.WebHookSecret is not  null && !BtcPayService.CheckSecretKey(_settings.WebHookSecret, jsonStr, signature))
-                {
-                    Logger.Error("Bad secret key");
-                    return StatusCode(StatusCodes.Status400BadRequest);
-                }
-                var invoice = await  _btcPayService.GetInvoice(_settings, webhookEvent.InvoiceId);
-                if( invoice is null)
-                {
-                    Logger.Error("Invoice not found");
-                    return StatusCode(StatusCodes.Status422UnprocessableEntity);
-                }
                 
                 var order = await _db.Orders.FirstOrDefaultAsync(x =>
                     x.PaymentMethodSystemName == BTCPayPaymentProvider.SystemName &&
                     x.OrderGuid == new Guid(orderId));
-                if (order == null)
+                
+                if (order is null)
                 {
                     Logger.Error("Order not found");
                     return StatusCode(StatusCodes.Status422UnprocessableEntity);
                 }
+                var settings = await  _services.SettingFactory.LoadSettingsAsync<BtcPaySettings>(order.StoreId);
+              
+                if (settings.WebHookSecret is not  null && !BtcPayService.CheckSecretKey(settings.WebHookSecret, jsonStr, signature))
+                {
+                    Logger.Error("Bad secret key");
+                    return StatusCode(StatusCodes.Status400BadRequest);
+                }
+                var invoice = await  _btcPayService.GetInvoice(settings, webhookEvent.InvoiceId);
 
                 if (await _btcPayService.UpdateOrderWithInvoice(order, invoice, webhookEvent))
                 {

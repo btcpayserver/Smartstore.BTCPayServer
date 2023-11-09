@@ -31,7 +31,6 @@ namespace Smartstore.BTCPayServer.Controllers
 
         public BtcPayAdminController(
             BtcPayService btcPayService,
-            ILogger<BtcPayAdminController> logger,
             LinkGenerator linkGenerator,
             ICommonServices services,
             IProviderManager providerManager,
@@ -92,8 +91,12 @@ namespace Smartstore.BTCPayServer.Controllers
             var uri = BTCPayServerClient.GenerateAuthorizeUri(btcpayUri,
                 new[]
                 {
-                    Policies.CanCreateInvoice, Policies.CanModifyStoreWebhooks, Policies.CanViewStoreSettings,
-                    Policies.CanCreateNonApprovedPullPayments
+                    Policies.CanCreateInvoice, // create invoices for payment
+                    Policies.CanViewInvoices, // fetch created invoices to check status
+                    Policies.CanModifyStoreSettings, // able to mark an invoice invalid in case merchant wants to void the order
+                    Policies.CanModifyStoreWebhooks, // able to create the webhook required automatically
+                    Policies.CanViewStoreSettings, // able to fetch rates
+                    Policies.CanCreateNonApprovedPullPayments // able to create refunds
                 },
                 true, true, ($"SmartStore{myStore.Id}", adminUrl));
             return uri + $"&applicationName={HttpUtility.UrlEncode(myStore.Name)}";

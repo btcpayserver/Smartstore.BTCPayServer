@@ -11,13 +11,11 @@ using Smartstore.Core.Checkout.Payment;
 
 namespace Smartstore.BTCPayServer.Services
 {
-    
-    
     public class BtcPayService
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public BtcPayService(IHttpClientFactory httpClientFactory )
+        public BtcPayService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
@@ -25,12 +23,13 @@ namespace Smartstore.BTCPayServer.Services
 
         public BTCPayServerClient GetClient(BtcPaySettings settings)
         {
-            return  new BTCPayServerClient(new Uri(settings.BtcPayUrl), settings.ApiKey,_httpClientFactory.CreateClient("BTCPayServer"));
+            return new BTCPayServerClient(new Uri(settings.BtcPayUrl), settings.ApiKey,
+                _httpClientFactory.CreateClient("BTCPayServer"));
         }
-        
+
         public async Task<string> GetStoreId(BtcPaySettings settings)
         {
-           return  (await  GetClient(settings).GetStores()).First().Id;
+            return (await GetClient(settings).GetStores()).First().Id;
         }
 
         public static bool CheckSecretKey(string key, string message, string signature)
@@ -42,7 +41,6 @@ namespace Smartstore.BTCPayServer.Services
 
         public async Task<InvoiceData> CreateInvoice(BtcPaySettings settings, PaymentDataModel paymentData)
         {
-
             var client = GetClient(settings);
             var req = new CreateInvoiceRequest()
             {
@@ -55,7 +53,7 @@ namespace Smartstore.BTCPayServer.Services
                     RedirectAutomatically = true,
                     RequiresRefundEmail = false
                 },
-                Metadata = JObject.FromObject(new 
+                Metadata = JObject.FromObject(new
                 {
                     buyerEmail = paymentData.BuyerEmail,
                     buyerName = paymentData.BuyerName,
@@ -63,19 +61,15 @@ namespace Smartstore.BTCPayServer.Services
                     orderUrl = paymentData.OrderUrl,
                     itemDesc = paymentData.Description,
                 }),
-                Receipt = new InvoiceDataBase.ReceiptOptions()
-                {
-                    Enabled = true,
-                }
+                Receipt = new InvoiceDataBase.ReceiptOptions() {Enabled = true,}
             };
-            
+
             var invoice = await client.CreateInvoice(settings.BtcPayStoreID, req);
             return invoice;
         }
 
         public async Task<string> CreateRefund(BtcPaySettings settings, RefundPaymentRequest refundRequest)
         {
-
             var client = GetClient(settings);
             var invoice = await client.GetInvoicePaymentMethods(settings.BtcPayStoreID,
                 refundRequest.Order.AuthorizationTransactionId);
@@ -103,7 +97,6 @@ namespace Smartstore.BTCPayServer.Services
                 refundRequest.Order.AuthorizationTransactionId, refundInvoiceRequest);
 
             return refund.ViewLink;
-
         }
 
         public async Task<string> CreateWebHook(BtcPaySettings settings, string webHookUrl)
@@ -116,36 +109,34 @@ namespace Smartstore.BTCPayServer.Services
                 await client.DeleteWebhook(settings.BtcPayStoreID, webhookData.Id);
             }
 
-            var response = await client.CreateWebhook(settings.BtcPayStoreID, new CreateStoreWebhookRequest()
-            {
-                Url = webHookUrl,
-                Enabled = true,
-                AuthorizedEvents = new StoreWebhookBaseData.AuthorizedEventsData()
+            var response = await client.CreateWebhook(settings.BtcPayStoreID,
+                new CreateStoreWebhookRequest()
                 {
-                    SpecificEvents = new[]
+                    Url = webHookUrl,
+                    Enabled = true,
+                    AuthorizedEvents = new StoreWebhookBaseData.AuthorizedEventsData()
                     {
-                        WebhookEventType.InvoiceReceivedPayment, WebhookEventType.InvoiceProcessing,
-                        WebhookEventType.InvoiceExpired, WebhookEventType.InvoiceSettled,
-                        WebhookEventType.InvoiceInvalid, WebhookEventType.InvoicePaymentSettled,
+                        SpecificEvents = new[]
+                        {
+                            WebhookEventType.InvoiceReceivedPayment, WebhookEventType.InvoiceProcessing,
+                            WebhookEventType.InvoiceExpired, WebhookEventType.InvoiceSettled,
+                            WebhookEventType.InvoiceInvalid, WebhookEventType.InvoicePaymentSettled,
+                        }
                     }
-                }
-                
-            });
+                });
             return response.Secret;
         }
 
         public async Task<InvoiceData> GetInvoice(BtcPaySettings settings, string invoiceId)
         {
-            
             var client = GetClient(settings);
             return await client.GetInvoice(settings.BtcPayStoreID, invoiceId);
         }
 
-        public async Task<bool> UpdateOrderWithInvoice(BtcPaySettings settings ,Order order, string  invoiceId)
+        public async Task<bool> UpdateOrderWithInvoice(BtcPaySettings settings, Order order, string invoiceId)
         {
             try
             {
-
                 var invoice = await GetInvoice(settings, invoiceId);
                 return await UpdateOrderWithInvoice(order, invoice, null);
             }
@@ -158,7 +149,7 @@ namespace Smartstore.BTCPayServer.Services
                 return true;
             }
         }
-        
+
         public async Task<bool> UpdateOrderWithInvoice(Order order, InvoiceData invoiceData,
             WebhookInvoiceEvent? webhookEvent)
         {
@@ -175,7 +166,7 @@ namespace Smartstore.BTCPayServer.Services
                     newPaymentStatus = PaymentStatus.Pending;
                     break;
                 case InvoiceStatus.Processing:
-                    newPaymentStatus =PaymentStatus.Pending; // PaymentStatus.Authorized; smartstore will set the order to processing otherwise
+                    newPaymentStatus = PaymentStatus.Authorized;
                     newOrderStatus = OrderStatus.Pending;
                     break;
                 case InvoiceStatus.Expired:
@@ -208,40 +199,53 @@ namespace Smartstore.BTCPayServer.Services
                 updated = true;
             }
 
+            var additionalMessage = GetAdditionalMessageFromWebhook(webhookEvent);
             if (updated)
             {
-                var aditionalData = GetAdditionalMessageFromWebhook(webhookEvent)?.message;
-                aditionalData = string.IsNullOrEmpty(aditionalData) ? "" : $" - {aditionalData}";
+                additionalMessage = string.IsNullOrEmpty(additionalMessage) ? "" : $" - {additionalMessage}";
                 order.AddOrderNote(
-                    $"BTCPayServer: Order status updated to {newOrderStatus} and payment status to {newPaymentStatus} by BTCPay with invoice {invoiceData.Id}{aditionalData}",
+                    $"BTCPayServer: Order status updated to {newOrderStatus} and payment status to {newPaymentStatus} by BTCPay with invoice {invoiceData.Id}{additionalMessage}",
                     false);
                 order.HasNewPaymentNotification = true;
 
-                if (order.PaymentStatus == PaymentStatus.Paid && !string.IsNullOrEmpty(order.CaptureTransactionResult))
+                if (order.PaymentStatus is PaymentStatus.Authorized or PaymentStatus.Paid &&
+                    !string.IsNullOrEmpty(order.CaptureTransactionResult))
                     order.AddOrderNote(
-                        $"BTCPayServer: Payment received. <a href='{order.CaptureTransactionResult}'>Click here for more information.</a>", true);
+                        $"BTCPayServer: Payment received {(order.PaymentStatus is PaymentStatus.Authorized ? $"but waiting to confirm. <a href='{order.AuthorizationTransactionResult}'>Click here for more information.</a>" : $". <a href='{order.CaptureTransactionResult}'>Click here for more information.</a>")}", true);
                 return true;
+            }
+            if (!string.IsNullOrEmpty(additionalMessage))
+            {
+                order.AddOrderNote(
+                    $"BTCPayServer: {additionalMessage}", false);
             }
 
             return false;
         }
 
 
-        private (string message, bool customerFriendly)? GetAdditionalMessageFromWebhook(WebhookInvoiceEvent? webhookEvent)
+        private string? GetAdditionalMessageFromWebhook(WebhookInvoiceEvent? webhookEvent)
         {
-             switch (webhookEvent?.Type)
-                {
-                    case WebhookEventType.InvoiceReceivedPayment when  webhookEvent.ReadAs<WebhookInvoiceReceivedPaymentEvent>() is { } receivedPaymentEvent:
-                        return ($"Payment detected ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})"  ,  false);
-                    case WebhookEventType.InvoicePaymentSettled when  webhookEvent.ReadAs<WebhookInvoicePaymentSettledEvent>() is { } receivedPaymentEvent:
-                        return ($"Payment settled ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})"  ,  false);
-                    case WebhookEventType.InvoiceProcessing when  webhookEvent.ReadAs<WebhookInvoiceProcessingEvent>() is { } receivedPaymentEvent && receivedPaymentEvent.OverPaid:
-                        return ($"Invoice was overpaid."  ,  false);
-                    case WebhookEventType.InvoiceExpired when  webhookEvent.ReadAs<WebhookInvoiceExpiredEvent>() is { } receivedPaymentEvent && receivedPaymentEvent.PartiallyPaid:
-                        return ($"Invoice expired but was paid partially, please check."  ,  false);
-                    default: return null;
-                }
+            switch (webhookEvent?.Type)
+            {
+                case WebhookEventType.InvoiceReceivedPayment
+                    when webhookEvent.ReadAs<WebhookInvoiceReceivedPaymentEvent>() is { } receivedPaymentEvent:
+                    return
+                        $"Payment detected ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})";
+                case WebhookEventType.InvoicePaymentSettled
+                    when webhookEvent.ReadAs<WebhookInvoicePaymentSettledEvent>() is { } receivedPaymentEvent:
+                    return
+                        $"Payment settled ({receivedPaymentEvent.PaymentMethod}: {receivedPaymentEvent.Payment.Value})";
+                case WebhookEventType.InvoiceProcessing
+                    when webhookEvent.ReadAs<WebhookInvoiceProcessingEvent>() is { } receivedPaymentEvent &&
+                         receivedPaymentEvent.OverPaid:
+                    return $"Invoice was overpaid.";
+                case WebhookEventType.InvoiceExpired
+                    when webhookEvent.ReadAs<WebhookInvoiceExpiredEvent>() is { } receivedPaymentEvent &&
+                         receivedPaymentEvent.PartiallyPaid:
+                    return $"Invoice expired but was paid partially.";
+                default: return null;
+            }
         }
-
     }
 }

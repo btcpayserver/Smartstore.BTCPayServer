@@ -13,6 +13,7 @@ using Smartstore.Core;
 using Smartstore.Core.Checkout.Cart;
 using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Checkout.Payment;
+using Smartstore.Core.Common;
 using Smartstore.Core.Common.Services;
 using Smartstore.Core.Configuration;
 using Smartstore.Core.Data;
@@ -27,7 +28,7 @@ namespace Smartstore.BTCPayServer.Providers
     [SystemName("Smartstore.BTCPayServer")]
     [FriendlyName("BTCPayServer")]
     [Order(1)]
-    public class BTCPayPaymentProvider : PaymentMethodBase, IConfigurable
+    public class BTCPayPaymentProvider : PaymentMethodBase, IConfigurable, IExchangeRateProvider
     {
         // https://smartstore.atlassian.net/wiki/spaces/SMNET40/pages/1927643267/How+to+write+a+Payment+Plugin
 
@@ -278,6 +279,23 @@ namespace Smartstore.BTCPayServer.Providers
                 Logger.LogError(e, e.Message);
                 return new VoidPaymentResult() {NewPaymentStatus = request.Order.PaymentStatus};
             }
+        }
+
+        public async Task<IList<ExchangeRate>> GetCurrencyLiveRatesAsync(string exchangeRateCurrencyCode)
+        {
+            var updateDate = DateTime.UtcNow;
+            var currencies = await _db.Currencies.ToListAsync();
+            var myStore = _services.StoreContext.CurrentStore;
+            var settings = _settingFactory.LoadSettings<BtcPaySettings>(myStore.Id);
+            var client = _btcPayService.GetClient(settings);
+            var pairs = currencies.Select(currency => exchangeRateCurrencyCode + "_" + currency.CurrencyCode).ToArray();
+            var rates = await client.GetStoreRates(settings.BtcPayStoreID,pairs);
+            return rates.Where(result => result.Rate is not null).Select(result => new ExchangeRate()
+            {
+                CurrencyCode = result.CurrencyPair.Split("_")[1],
+                Rate = result.Rate.Value,
+                UpdatedOn = updateDate
+            }).ToList();
         }
     }
 }
