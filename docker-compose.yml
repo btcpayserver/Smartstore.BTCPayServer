@@ -2,7 +2,7 @@ version: "3.4"
 services:
   web:
     image: ghcr.io/smartstore/smartstore-linux
-    container_name: web
+    container_name: smartstore_btcpay
     ports:
       - "80:80"
     restart: unless-stopped
