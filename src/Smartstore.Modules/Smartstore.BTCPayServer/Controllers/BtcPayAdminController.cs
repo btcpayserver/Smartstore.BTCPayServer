@@ -93,7 +93,7 @@ namespace Smartstore.BTCPayServer.Controllers
                 {
                     Policies.CanCreateInvoice, // create invoices for payment
                     Policies.CanViewInvoices, // fetch created invoices to check status
-                    Policies.CanModifyStoreSettings, // able to mark an invoice invalid in case merchant wants to void the order
+                    Policies.CanModifyInvoices, // able to mark an invoice invalid in case merchant wants to void the order
                     Policies.CanModifyStoreWebhooks, // able to create the webhook required automatically
                     Policies.CanViewStoreSettings, // able to fetch rates
                     Policies.CanCreateNonApprovedPullPayments // able to create refunds

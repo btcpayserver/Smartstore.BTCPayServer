@@ -4,7 +4,7 @@
   "SystemName": "Smartstore.BTCPayServer",
   "FriendlyName": "Bitcoin payments with BTCPay Server",
   "Description": "This plugin enables Bitcoin payments with your BTCPay Server instance",
-  "Version": "5.0.5",
+  "Version": "5.0.5.1",
   "MinAppVersion": "5.0.5",
   "Author": "Nisaba Solutions",
   "Order": 1,
