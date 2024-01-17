@@ -1,10 +1,12 @@
-# BTCPay Plugin for SmartStore
+# BTCPay plugin for SmartStore - accept Bitcoin payments
 
 ![BTCPay Server](https://github.com/btcpayserver/btcpayserver/raw/master/BTCPayServer/wwwroot/img/btc_pay_BG_twitter.png)
 
 ## Plugin Overview
 
-This plugin allows you to easily integrate Bitcoin payments into your SmartStore website using BTCPay Server. You can configure the plugin either automatically or manually, depending on your preferences and requirements.
+This plugin allows you to easily integrate Bitcoin payments into your SmartStore website using BTCPay Server — a free, self-hosted and open-source payment gateway solution designed to revolutionize Bitcoin payments. Our seamless integration with SmartStore ensures a hassle-free connection to your self-hosted BTCPay Server. 
+
+Experience the simplicity of accepting Bitcoin payments with just a few straightforward steps. You can configure the plugin either automatically or manually, depending on your preferences and requirements.
 
 ## Automatic Configuration
 
@@ -15,7 +17,6 @@ This plugin allows you to easily integrate Bitcoin payments into your SmartStore
 3. The "API Key", "BTCPay Store ID" and "Webhook Secret" fields will be automatically filled and a webhook created
 4. Click "Save" button at the top right to persist the configuration
 5. Congrats, the configuration is now done.
-
 
 ## Manual Configuration
 
