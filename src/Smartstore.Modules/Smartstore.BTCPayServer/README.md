@@ -1,6 +1,6 @@
 # BTCPay plugin for SmartStore - accept Bitcoin payments
 
-![BTCPay Server SmartStore banner](/wwwroot/banner.png)
+![BTCPay Server SmartStore banner](/src/Smartstore.Modules/Smartstore.BTCPayServer/wwwroot/banner.png)
 
 ## Plugin Overview
 
